@@ -2,7 +2,7 @@
 def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-np-prod-promo-controls-us-es4-function \
                                     --gen2 \
                                     --runtime=python311 \
-                                    --region=us-east4 --source=./cloud_functions/dw-np-prod-promo-controls-us-es4-function \
+                                    --region=us-east4 --source=dw-np-prod-promo-controls-us-es4-function \
                                     --trigger-http --entry-point=run_lambda \
                                     --set-env-vars stage=ENVIRONMENT_NAME \
                                     --memory=512MB \

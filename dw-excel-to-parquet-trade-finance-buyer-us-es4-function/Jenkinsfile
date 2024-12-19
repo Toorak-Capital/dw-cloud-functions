@@ -3,7 +3,7 @@ def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-excel-to-parquet-trade-fi
                                     --gen2 \
                                     --runtime=python311 \
                                     --region=us-central1 \
-                                    --source=./cloud_functions/dw-excel-to-parquet-trade-finance-buyer-us-es4-function \
+                                    --source=dw-excel-to-parquet-trade-finance-buyer-us-es4-function \
                                     --entry-point=trigger_on_warehouseline_update \
                                     --set-env-vars stage=ENVIRONMENT_NAME \
                                     --memory=1024MB \
