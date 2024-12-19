@@ -94,8 +94,6 @@ def lambda_handler(request, context):
     elif event_type == 'OBJECT_FINALIZE' and 'PostPurchaseLoanData/Toorak' in file_path:
         trigger_on_toorak_servicer_report(file_path, file_uri)
         print("Uploaded Toorak Servicer successfully")
-    elif event_type == 'OBJECT_FINALIZE' and 'postpurchaseloandata/postpurchaseloandata_nationstar' in file_uri.lower():
-        trigger_on_nation_star_upload(file_uri)
     else:
         print("Nothing happened")
     

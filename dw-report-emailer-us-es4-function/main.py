@@ -120,7 +120,6 @@ def check_log_file_in_gcs(bucket_name):
 
 def lambda_handler(request):
     request_json = request.get_json(silent=True)
-
     if request_json['report'] == 'table_funding':  
             file_name = f'Table Funding Pipeline Report - {date_for_mail}'
             response = table_funding_report(file_name, sdk, email_api, bucket, get_bucket)
@@ -134,6 +133,7 @@ def lambda_handler(request):
             dd_firm = 'Opus'
             file_name = f'Diligence Submission Report - {date_for_mail}'
             response = diligence_submission_emailer(file_name, dd_firm, sdk, email_api, bucket, get_bucket)
+    
     
     log_file_exists = check_log_file_in_gcs(log_bucket_name)
     pipeline_ran_today = query_bigquery()
