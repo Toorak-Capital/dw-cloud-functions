@@ -2,7 +2,7 @@
 def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-send-email-us-es4-cf \
                                     --gen2 \
                                     --runtime=python311 \
-                                    --region=us-east4 --source=./cloud_functions/dw-send-email-us-es4-cf\
+                                    --region=us-east4 --source=dw-send-email-us-es4-cf\
                                     --entry-point=send_email \
                                     --set-env-vars stage=ENVIRONMENT_NAME \
                                     --set-secrets secretKey=dw-np-noreply-email-api-key-sm-us-ct1:1 \
