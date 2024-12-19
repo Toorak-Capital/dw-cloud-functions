@@ -1,0 +1,14 @@
+functions-framework==3.*
+looker-sdk==24.16.2
+pandas
+numpy
+openpyxl
+requests
+secure-smtplib
+google-cloud-storage
+mime
+google-cloud-secret-manager
+sib_api_v3_sdk
+jinja2
+Pillow==10.1.0
+google-cloud-bigquery

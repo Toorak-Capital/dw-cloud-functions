@@ -1,0 +1,16 @@
+functions-framework==3.*
+pandas
+numpy
+pysftp
+openpyxl
+paramiko
+pyarrow
+fastparquet
+gcsfs
+fsspec
+openpyxl
+lxml
+requests
+google-cloud-secret-manager
+google-cloud-storage
+google-cloud-logging

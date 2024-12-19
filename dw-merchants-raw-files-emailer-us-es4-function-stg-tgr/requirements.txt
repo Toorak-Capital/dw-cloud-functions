@@ -1,0 +1,11 @@
+functions-framework==3.*
+pandas
+numpy
+openpyxl
+google-cloud-storage
+google-cloud-logging
+google-cloud-secret-manager
+requests
+secure-smtplib
+mime
+sib_api_v3_sdk

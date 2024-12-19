@@ -1,0 +1,4 @@
+functions-framework==3.*
+google-cloud-storage
+sib_api_v3_sdk
+google-cloud-secret-manager

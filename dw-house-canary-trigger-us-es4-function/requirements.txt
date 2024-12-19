@@ -1,0 +1,11 @@
+functions-framework==3.*
+pandas
+numpy
+gcsfs
+fsspec
+openpyxl
+requests
+google-cloud-storage
+pyarrow
+fastparquet
+google-cloud-logging

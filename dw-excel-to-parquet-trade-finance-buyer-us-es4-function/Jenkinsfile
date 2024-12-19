@@ -1,0 +1,21 @@
+@Library('jenkins-shared-library') _
+def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-excel-to-parquet-trade-finance-buyer-us-es4-function \
+                                    --gen2 \
+                                    --runtime=python311 \
+                                    --region=us-central1 \
+                                    --source=./cloud_functions/dw-excel-to-parquet-trade-finance-buyer-us-es4-function \
+                                    --entry-point=trigger_on_warehouseline_update \
+                                    --set-env-vars stage=ENVIRONMENT_NAME \
+                                    --memory=1024MB \
+                                    --timeout=300 \
+                                    --service-account=si-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
+                                    --trigger-event-filters serviceName=storage.googleapis.com \
+                                    --trigger-event-filters type=google.cloud.audit.log.v1.written \
+                                    --trigger-event-filters methodName=storage.objects.create \
+                                    --trigger-event-filters-path-pattern resourceName='projects/_/buckets/si-dw-ENVIRONMENT_NAME-email-trigger-us-ct1-gcs/objects/*.xlsx' \
+                                    --trigger-location=us-central1 \
+                                    --trigger-service-account=si-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
+                                    --update-labels product=dw  \
+                                    --update-labels environment=ENVIRONMENT_NAME \
+                                    --update-labels deployedby=cicd"]]
+dwServerless(config)
