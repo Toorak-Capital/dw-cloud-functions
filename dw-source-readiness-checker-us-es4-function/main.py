@@ -102,8 +102,7 @@ def lambda_handler(event):
         mismatches, pretty_table = check_latest_file_date(bucket_folder_pairs_dest)
     if not mismatches.empty:
         print(mismatches)
-        if event_json['files'] != 'rsd_files':
-            create_and_upload_log_file(f'dw-{env}-cron-job-log-file-execution', f'{file_name}','Stop the Pipeline')
+        create_and_upload_log_file(f'dw-{env}-cron-job-log-file-execution', f'{file_name}','Stop the Pipeline')
         html_table = pretty_table.get_html_string(attributes={"border": "1", "class": "table table-striped"})
         print(html_table)
         email_body = EmailBody.replace('{{html_table}}', html_table)
