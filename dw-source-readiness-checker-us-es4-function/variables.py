@@ -4,6 +4,11 @@ env = os.environ.get('stage', 'prod')
 project_id = os.environ.get('project_id', 'np-toorak')
 
 
+rsd_bucket_folder_pairs_dest = [{'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Extension Tracker', 0)},
+        {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Report/', 0)},
+        {'RSD_Master RSD Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master RSD Report', 0)},
+        {'RSD_Master Special Servicing Weekly': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Special Servicing Weekly', 0)}
+        ]
 
 bucket_folder_pairs_dest = [
         {'RCN': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'RCN/to-process-v2/DailyTrialBalance', 0)},
@@ -19,11 +24,7 @@ bucket_folder_pairs_dest = [
         {'FCI_getACHStatus': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/getACHStatus', 0)},
         {'FCI_loan_portfolio_information': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/loan_portfolio_information', 0)},
         {'BSI-Merchants': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI-Merchants/to-process-v2/Status', 0)},
-        {'BZ': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/to-process-v2', 0)},
-        {'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Extension Tracker', 0)},
-        {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Report/', 0)},
-        {'RSD_Master RSD Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master RSD Report', 0)},
-        {'RSD_Master Special Servicing Weekly': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Special Servicing Weekly', 0)},
+        {'BZ': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/to-process-v2', 0)}
     ]
 
 if env == 'prod':

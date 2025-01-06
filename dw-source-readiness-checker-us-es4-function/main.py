@@ -95,7 +95,11 @@ def create_and_upload_log_file(bucket_name, file_name, log_content):
 def lambda_handler(event):
     current_date = datetime.now().strftime("%Y-%m-%d")
     file_name = f"{current_date}-file-checker.log"
-    mismatches, pretty_table = check_latest_file_date(bucket_folder_pairs_dest)
+    event_json = event.get_json(silent=True)
+    if event_json['files'] == 'rsd_files':
+        mismatches, pretty_table = check_latest_file_date(rsd_bucket_folder_pairs_dest)
+    else:
+        mismatches, pretty_table = check_latest_file_date(bucket_folder_pairs_dest)
     if not mismatches.empty:
         print(mismatches)
         create_and_upload_log_file(f'dw-{env}-cron-job-log-file-execution', f'{file_name}','Stop the Pipeline')
