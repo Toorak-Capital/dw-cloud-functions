@@ -5,7 +5,6 @@ def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-send-email-us-es4-cf \
                                     --region=us-east4 --source=dw-send-email-us-es4-cf\
                                     --entry-point=send_email \
                                     --set-env-vars stage=ENVIRONMENT_NAME \
-                                    --set-secrets secretKey=dw-np-noreply-email-api-key-sm-us-ct1:1 \
                                     --memory=256MB \
                                     --timeout=180 \
                                     --trigger-http \
