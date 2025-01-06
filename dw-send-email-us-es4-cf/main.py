@@ -29,7 +29,7 @@ def send_mail(sender, recipients, title, html, attachments,filename):
     The sender needs to be a verified email in SES.
     """
     configuration = sib_api_v3_sdk.Configuration()
-    configuration.api_key['api-key'] = get_secret(ProjectId,SecretName)
+    configuration.api_key['api-key'] = get_secret(secret_name['email_api'])
     api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration)) 
 
     headers = {"Content-Disposition":"Attachments"}
@@ -43,9 +43,23 @@ def send_mail(sender, recipients, title, html, attachments,filename):
         return e
 
 
-def get_secret(project_id,secret_name):
+
+def get_secret(secret_id):
+
     client = secretmanager_v1.SecretManagerServiceClient()
-    secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
-    # response = client.access_secret_version(request={"name": secret_path})
-    # return response.payload.data.decode("UTF-8")
-    return "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"
+    name = f"projects/{secret_project_id}/secrets/{secret_id}/versions/latest"
+    response = client.access_secret_version(name=name)
+    secret_data = response.payload.data.decode("UTF-8")
+    try:
+        secret_dict = json.loads(secret_data)
+        return secret_dict
+    except json.JSONDecodeError:
+        # If it's not JSON, return the data as a plain string
+        return secret_data
+    
+# def get_secret(project_id,secret_name):
+#     client = secretmanager_v1.SecretManagerServiceClient()
+#     secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
+#     # response = client.access_secret_version(request={"name": secret_path})
+#     # return response.payload.data.decode("UTF-8")
+#     return "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"
