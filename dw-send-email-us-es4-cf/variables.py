@@ -1,6 +1,3 @@
-ProjectId="947624841920"
-SecretName = "dw-noreply-email-api-key"
-
 import os
 from datetime import datetime
 env = os.environ.get('stage', 'dev')
