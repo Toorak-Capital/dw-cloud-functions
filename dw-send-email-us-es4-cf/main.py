@@ -56,10 +56,3 @@ def get_secret(secret_id):
     except json.JSONDecodeError:
         # If it's not JSON, return the data as a plain string
         return secret_data
-    
-# def get_secret(project_id,secret_name):
-#     client = secretmanager_v1.SecretManagerServiceClient()
-#     secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
-#     # response = client.access_secret_version(request={"name": secret_path})
-#     # return response.payload.data.decode("UTF-8")
-#     return "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"
