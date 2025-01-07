@@ -48,7 +48,7 @@ else:
         {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"}
         ]
     
-SendEmailCFUrl = f'https://us-east4-{project_id}.cloudfunctions.net/dw-send-email-us-es4-cf'
+SendEmailCFUrl = f'https://us-east4-{project_id}.cloudfunctions.net/dw-prod-send-email-us-es4-cf'
 Subject = 'Alert: Missing Servicer Files'
 
 
