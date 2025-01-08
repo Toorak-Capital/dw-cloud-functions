@@ -13,7 +13,8 @@ if env == 'prod':
     opus_email_cc=[{"email":'tablefunding@toorakcapital.com',"name":"Table Funding Team"},
                    {"email":'LAT@toorakcapital.com',"name":"Loan Acquisitions Team"},
                     {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
-                        {"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
+                        {"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"},
+                   {"email":'tooraksupport@triconinfotech.com',"name":"support_team"}]
     
     ca_email_recipients = [{"email":'caanalystsreporting@ca-usa.com',"name":"CA Team"},
                         {"email":'toorakdscr@ca-usa.com',"name":"ToorakDSCR"},
@@ -21,7 +22,8 @@ if env == 'prod':
     
     ca_email_cc = [{"email":'LAT@toorakcapital.com',"name":"Loan Acquisitions Team"},
                     {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
-                    {"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
+                    {"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"},
+                   {"email":'tooraksupport@triconinfotech.com',"name":"support_team"}]
     
 else:
     

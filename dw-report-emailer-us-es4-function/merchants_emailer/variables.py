@@ -21,7 +21,8 @@ if env == 'prod':
     merchant_email_recipients = [{"email":'asimanovsky@toorakcapital.com',"name":"Aleksandra"},
                         {"email":'dyner@toorakcapital.com',"name":"Eric"},
                         {"email":'mbergamaschi@toorakcapital.com',"name":"Mauricio"},
-                        {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"}]
+                        {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
+                        {"email":"kchen@toorakcapital.com", "name":"kchen"}]
     
     merchant_email_cc = [{"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
     

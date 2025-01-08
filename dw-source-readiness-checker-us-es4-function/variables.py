@@ -35,7 +35,8 @@ if env == 'prod':
         {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
         {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
         {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"},
-        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"}
+        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"},
+        {"email":"diguvamaheshwarsingh@triconinfotech.com", "name":"mahesh"}
         ]
 else:
     Recipients = [
@@ -45,7 +46,8 @@ else:
         {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
         {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
         {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"},
-        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"}
+        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"},
+        {"email":"diguvamaheshwarsingh@triconinfotech.com", "name":"mahesh"}
         ]
     
 SendEmailCFUrl = f'https://us-east4-{project_id}.cloudfunctions.net/dw-prod-send-email-us-es4-cf'
