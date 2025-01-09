@@ -9,7 +9,8 @@ if env == 'dev':
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
     email_recipients = [{"email":"sasi.jyothsna@triconinfotech.com","name":"Sasi Jyothsna"},
                     {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"},
-                   {"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"}]
+                   {"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"},
+                   {"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
     
     secret_name = {'email_api' : 'dw-np-noreply-email-api-key-sm-us-ct1',
                    'looker_creds' : 'looker-creds-dev-dw-ue1-sm'}
@@ -19,7 +20,7 @@ if env == 'dev':
 else:
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
     email_recipients = [{"email":'lberger@toorakcapital.com',"name":"lberger"},
-                            {"email":'ppatel@toorakcapital.com',"name":"ppatel"},
+                            {"email":'kchen@toorakcapital.com  ',"name":"kchen"},
                             {"email":'edyner@toorakcapital.com',"name":"edyner"},
                             {"email":'jward@toorakcapital.com',"name":"jward"},
                             {"email":'svenugopal@toorakcapital.com',"name":"sachin"},
