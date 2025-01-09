@@ -4,6 +4,13 @@ env = os.environ.get('stage', 'prod')
 project_id = os.environ.get('project_id', 'np-toorak')
 
 
+# dw-prod-bronze-purchased-loan-us-es4-gcs/Repo/nationstar_monthly_remittance
+monthly_files_bucket_folders_dest = [{'CPUInterestRateTracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'PostPurchaseLoanData/to-process-v2/CPUInterestRateTracker', 18)},
+        {'toorak_agg': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Repo/toorak_agg', 18)},
+        {'nationstar_monthly_remittance': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Repo/nationstar_monthly_remittance', 18)}
+        ]
+
+
 rsd_bucket_folder_pairs_dest = [{'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Extension Tracker', 0)},
         {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Report/', 0)},
         {'RSD_Master RSD Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master RSD Report', 0)},

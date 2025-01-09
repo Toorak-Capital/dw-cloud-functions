@@ -96,13 +96,16 @@ def lambda_handler(event):
     current_date = datetime.now().strftime("%Y-%m-%d")
     file_name = f"{current_date}-file-checker.log"
     event_json = event.get_json(silent=True)
-    if event_json['files'] == 'rsd_files':
+    if event_json['files'] == 'monthly_files':
+        mismatches, pretty_table = check_latest_file_date(monthly_files_bucket_folders_dest)
+    elif event_json['files'] == 'rsd_files':
         mismatches, pretty_table = check_latest_file_date(rsd_bucket_folder_pairs_dest)
     else:
         mismatches, pretty_table = check_latest_file_date(bucket_folder_pairs_dest)
     if not mismatches.empty:
         print(mismatches)
-        create_and_upload_log_file(f'dw-{env}-cron-job-log-file-execution', f'{file_name}','Stop the Pipeline')
+        if event_json['push_log'] == True:
+            create_and_upload_log_file(f'dw-{env}-cron-job-log-file-execution', f'{file_name}','Stop the Pipeline')
         html_table = pretty_table.get_html_string(attributes={"border": "1", "class": "table table-striped"})
         print(html_table)
         email_body = EmailBody.replace('{{html_table}}', html_table)
