@@ -20,6 +20,8 @@ if env == 'prod':
                         {"email":"mbergamaschi@toorakcapital.com", "name":"Mauricio Bergamaschi"},
                         {"email":'wcoffey@toorakcapital.com',"name":"William Coffey"},
                         {"email":'sgoldman@toorakcapital.com',"name":"Scott Goldman"},
+                        {"email":'cmacintosh@toorakcapital.com',"name":"Macintosh"},
+                        {"email":'lberger@toorakcapital.com',"name":"Lincoln Berger"},
                         {"email":'cschollmeyer@toorakcapital.com',"name":"Caryn Schollmeyer"},
                         {"email":'ToorakDataTeam@triconinfotech.com',"name":"Toorak Data Team"}]
     
