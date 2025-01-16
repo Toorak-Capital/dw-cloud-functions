@@ -1,0 +1,15 @@
+@Library('jenkins-shared-library') _
+def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-notify-pipeline-status-us-es4-function \
+                                    --gen2 \
+                                    --runtime=python311 \
+                                    --region=us-east4 --source=dw-notify-pipeline-status-us-es4-function \
+                                    --entry-point=notify_pipeline_status \
+                                    --set-env-vars stage=ENVIRONMENT_NAME,project_id=${env.project_id} \
+                                    --memory=512MB \
+                                    --timeout=300 \
+                                    --trigger-http \
+                                    --service-account=dw-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
+                                    --update-labels product=dw  \
+                                    --update-labels environment=ENVIRONMENT_NAME \
+                                    --update-labels deployedby=cicd"]]
+dwServerless(config)
