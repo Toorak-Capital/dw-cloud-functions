@@ -96,7 +96,7 @@ def lambda_handler(request, context):
         trigger_on_toorak_servicer_report(file_path, file_uri)
         print("Uploaded Toorak Servicer successfully")
 
-    elif event_type == 'OBJECT_FINALIZE' and 'ToorakAssetManagement_AM Consolidated' in file_path:
+    elif event_type == 'OBJECT_FINALIZE' and 'ToorakAssetManagement/AM Consolidated' in file_path:
         trigger_on_am_report(file_path, file_uri)
         print("Uploaded Toorak Asset Management successfully")
     else:

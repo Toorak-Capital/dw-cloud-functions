@@ -26,7 +26,7 @@ def trigger_on_am_report(file_path, file_uri):
     formatted_date = extract_date(file_path)
     
     
-    df = read_excel(file_uri, sheet_name = 'Toorak Master List')
+    df = read_excel(file_uri, sheet_name = 'Toorak Master List_Bridge')
     
     if df.empty or len(df.columns) == 0:
         print('File is empty. No further action taken.')
