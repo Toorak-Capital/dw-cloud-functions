@@ -33,7 +33,7 @@ def trigger_on_nation_star_upload(file_uri):
     normalised_file_url = file_uri.lower()
     if 'nationstar' not in normalised_file_url and 'remittance' not in normalised_file_url:
         return None
-    df = pd.read_excel(file_uri,dtype=str, sheet_name='LOAN_LEVEL',skiprows=1)
+    df = pd.read_excel(file_uri,dtype=str, sheet_name='LOAN_LEVEL',skiprows=0)
     std_df = rename_columns(df)
     # Check if DataFrame is empty
     if std_df.empty or len(std_df.columns) == 0:
