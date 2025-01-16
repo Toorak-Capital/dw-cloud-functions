@@ -191,7 +191,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
     elif 'toorak_agg' in file_name:
         monthly_paydown_df,file_date = get_sheet_data(file_path,type='toorak_agg')
         if not monthly_paydown_df.empty and len(monthly_paydown_df.columns) != 0:
-            write_parquet_file(monthly_paydown_df,file_date,warehouseline,type='toorak_agg')    
+            write_parquet_file(monthly_paydown_df,file_date,warehouseline='',type='toorak_agg')    
     else:
         if not is_payoff:
             tape_df,file_date = get_sheet_data(file_path,type='tape')
