@@ -5,23 +5,44 @@ import pandas as pd
 import numpy as np
 import json
 import io
-#import boto3
 import logging
 import boxsdk
 from json import loads
 from boxsdk import JWTAuth,Client
 import os
-import base64
-#from botocore.exceptions import ClientError
 import re
 from datetime import datetime
+from google.cloud import bigquery
 from google.cloud import storage
 from variables import *
 from google.cloud import secretmanager_v1
 import openpyxl
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment
 
 todays_date = datetime.now().strftime("%m-%d-%Y")
-wells_file = 'DW - Wells IPS {todays_date}.xlsx'
+wells_file_name = f'DW - Wells IPS {todays_date} test.xlsx'
+pst_file_name = f'DW - Payment Status Tracker {todays_date} test.xlsx'
+
+def retriveBoxConfigFromSecret(secret):
+
+    privateKey = secret['privateKey'].replace("\\n","\n")
+
+    json_object = {
+      "boxAppSettings": {
+        "clientID": secret['clientID'] ,
+        "clientSecret": secret['clientSecret'],
+        "appAuth": {
+          "publicKeyID": secret['publicKeyID'] ,
+          "privateKey": privateKey,
+          "passphrase": secret['passphrase']
+        }
+      },
+      "enterpriseID": secret['enterpriseID']
+    }
+    box_user_id = secret['box_user_id']
+
+    return json_object,box_user_id
 
 
 def query_bigquery():
@@ -79,16 +100,81 @@ def check_pipeline_run(request):
   pipeline_ran_today = query_bigquery()
 
   if log_file_exists or not pipeline_ran_today:
-    upload_report_to_box()
+    box_looker_conn()
+
+    return {
+            'statusCode': 200,
+            'body': f"uploaded all files into box"
+        }  
+
+def run_look_and_clean_df(sdk, look_id, col_name):
+    
+    response = sdk.run_look(look_id, "csv")
+    df = pd.read_csv(io.StringIO(response))
+    df.columns = [col.replace('_', ' ') if col_name not in col else col.replace(f'{col_name} ','') for col in df.columns]
+    print(df.columns)
+    if 'mba order' in df.columns:
+        df.drop('mba order', axis = 1, inplace = True)
+    return df
+
+def pst_file_prep(sdk, user_client, pst_look_ids):
+
+    tmp_file = '/tmp/report.xlsx'
+    pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
+    all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
+    bridge_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_bridge_summary'], 'Pst Bridge Summary')
+    dscr_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_dscr_summary'],'Pst Dscr Summary')
+
+    pst_summary = pd.concat([all_loans,bridge_summary,dscr_summary], axis=1)
+
+    with pd.ExcelWriter(tmp_file, engine='openpyxl') as writer:
+        pst_summary.to_excel(writer, index=False, header=True, sheet_name='Summary', startrow=1)
+        pst_all_loans.to_excel(writer, index=False, header=True, sheet_name='PST')
+
+    wb = load_workbook(tmp_file)
+    ws = wb['Summary']
+
+    ws.merge_cells('A1:D1')
+    ws['A1'] = 'All Loans'
+    ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
 
 
-def upload_report_to_box():
+    ws.merge_cells('F1:I1')
+    ws['F1'] = 'Bridge'
+    ws['F1'].alignment = Alignment(horizontal='center', vertical='center')
 
+    ws.merge_cells('K1:N1')
+    ws['K1'] = 'DSCR'
+    ws['K1'].alignment = Alignment(horizontal='center', vertical='center')
+
+    pst_buffer = io.BytesIO()
+    wb.save(pst_buffer)
+    upload_file_to_box(user_client, pst_buffer, pst_box_folder_id, pst_file_name)
+
+
+def wells_file_prep(sdk, user_client, wells_look_id):
+
+    wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
+    wells_buffer = io.BytesIO()
+    wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
+    upload_file_to_box(user_client, wells_buffer, wells_box_folder_id, wells_file_name)
+    
+
+def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
+
+    buffer.seek(0)
+    uploaded_file = user_client.folder(box_folder_id).upload_stream(buffer, file_name=file_name)
+    print(f"{file_name} is uploaded to box successfully")
+
+
+
+def box_looker_conn():
 
     box_creds = get_secret(secret_name['box_creds'])
-    config = JWTAuth.from_settings_dictionary(box_creds['box_key'])                    
+    box_key,box_user_id = retriveBoxConfigFromSecret(box_creds)
+    config = JWTAuth.from_settings_dictionary(box_key)                    
     client = Client(config)
-    user_to_impersonate = client.user(user_id=box_creds['box_id'])
+    user_to_impersonate = client.user(user_id=box_user_id)
     user_client = client.as_user(user_to_impersonate)
 
     #initiate looker sdk
@@ -98,15 +184,5 @@ def upload_report_to_box():
     os.environ['LOOKERSDK_CLIENT_SECRET'] = looker_creds['LOOKERSDK_CLIENT_SECRET']
     sdk = looker_sdk.init40()
 
-    response = sdk.run_look(look_id['wells_ips'], "csv")
-    df = pd.read_csv(io.StringIO(response))
-    df.columns = [col if 'Wells Ips' not in col else col.replace('Wells Ips ','') for col in df.columns]
-
-
-    excel_buffer = io.BytesIO()
-    df.to_excel(excel_buffer, index=False, engine='openpyxl')
-    excel_buffer.seek(0)
-    uploaded_file = user_client.folder(box_folder_id).upload_stream(excel_buffer, file_name=wells_file)
-       
-    print(f'file {wells_file} uploaded to box')
-    
+    pst_buffer = pst_file_prep(sdk, user_client, look_id['pst'])
+    wells_buffer = wells_file_prep(sdk, user_client, look_id['wells_ips'])

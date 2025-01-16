@@ -24,6 +24,7 @@ from uk_emailer.uk_emailer import *
 from diligence_emailer.diligence_emailer import *
 from risk_score_emailer.risk_score_emailer import *
 from table_funding_emailer.table_funding import *
+from pst_emailer.pst_emailer import *
 
 
 start_time = time.time()
@@ -159,6 +160,10 @@ def lambda_handler(request):
         elif request_json['report'] == 'uk_weekly':
             file_name = f'UK Weekly Report - {date_for_mail}'
             response = uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket)
+
+        elif request_json['report'] == 'pst_daily':
+            file_name = f'Payment Status Tracker Report - {date_for_mail}'
+            response = pst_emailer(file_name, sdk, email_api, bucket, get_bucket)
         
         
         elif request_json['report'] == 'risk_score_weekly_report':

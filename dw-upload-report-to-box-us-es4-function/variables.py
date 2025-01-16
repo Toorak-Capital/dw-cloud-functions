@@ -4,7 +4,14 @@ env = os.environ.get('stage', 'dev')
 project_id = os.environ.get('project_id', 'toorak-396910')
 
 box_folder_id = '240730218734'
-look_id = {'wells_ips' : '250'}
+look_id = {'wells_ips' : '250',
+            'pst' :{'pst_all_loans' : '251',
+            'pst_summary' : '250',
+            'pst_bridge_summary' : '250',
+            'pst_dscr_summary' : '250'}}
+
+wells_box_folder_id = '240730218734'
+pst_box_folder_id = '302849922519'
 
 if env == 'prod':
     
