@@ -1,0 +1,12 @@
+functions-framework==3.*
+google-cloud-secret-manager
+looker-sdk==24.16.2
+pandas
+numpy
+pysftp
+openpyxl
+google-cloud-storage
+paramiko
+requests
+boxsdk
+boxsdk[jwt]
