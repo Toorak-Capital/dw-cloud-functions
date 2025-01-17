@@ -121,6 +121,11 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
 
     tmp_file = '/tmp/report.xlsx'
     pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
+
+    date_columns = ['Trade Date', 'First Pay Date', 'Maturity Date', 'Next Payment Date','Last Payment Date', 'Loan Comments Added Date','Legal Comments Added Date','Breezeway Paid Off Date', 'Servicer Paid Off Date','Original Maturity Date']
+    for date_column in date_columns:
+        pst_all_loans[date_column] = pd.to_datetime(pst_all_loans[date_column], format='%m/%d/%Y')
+
     all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
     bridge_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_bridge_summary'], 'Pst Bridge Summary')
     dscr_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_dscr_summary'],'Pst Dscr Summary')
@@ -155,6 +160,9 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
 def wells_file_prep(sdk, user_client, wells_look_id):
 
     wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
+    date_columns = ['Note Date','First Pay Date','Original Maturity Date','Current Maturity Date','Trade Date','Trade Finance Date','Int Accrual Date','Updated Appraisal or BPO Value Date','Issued Cut Off Date','Sale Date','Current Maturity Date By Cycle','Property Acquire Dt','Orig Fico Date','Original Appraisal Date']
+    for date_column in date_columns:
+        wells_df[date_column] = pd.to_datetime(wells_df[date_column], format='%m/%d/%Y')
     wells_buffer = io.BytesIO()
     wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, wells_buffer, wells_box_folder_id, wells_file_name)
