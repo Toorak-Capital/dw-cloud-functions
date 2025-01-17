@@ -21,8 +21,8 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment
 
 todays_date = datetime.now().strftime("%m-%d-%Y")
-wells_file_name = f'DW - Wells IPS {todays_date} test.xlsx'
-pst_file_name = f'DW - Payment Status Tracker {todays_date} test.xlsx'
+wells_file_name = f'DW - Wells IPS {todays_date}.xlsx'
+pst_file_name = f'DW - Payment Status Tracker {todays_date}.xlsx'
 
 def retriveBoxConfigFromSecret(secret):
 
