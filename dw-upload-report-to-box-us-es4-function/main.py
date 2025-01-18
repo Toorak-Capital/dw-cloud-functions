@@ -107,30 +107,57 @@ def check_pipeline_run(request):
             'body': f"uploaded all files into box"
         }  
 
+def dollar_sign(df,columns):
+    
+    # Add $ sign to float columns
+    for col in columns:
+        if col in list(df.columns):
+            df[col] = df[col].apply(lambda x: f'${x:,.2f}')
+    return df
+
+def date_column_format(df,columns):
+    
+    # Add $ sign to float columns
+    for col in columns:
+        if col in list(df.columns):
+            df[col] = pd.to_datetime(df[col], format='%m/%d/%Y')
+    return df
+    
+def percentage_sign(df,columns):
+    
+    # Add $ sign to float columns
+    for col in columns:
+        if col in list(df.columns):
+            df[col] = df[col].apply(lambda x: f'{x*100:,.2f}%')
+    return df
+
 def run_look_and_clean_df(sdk, look_id, col_name):
     
     response = sdk.run_look(look_id, "csv")
     df = pd.read_csv(io.StringIO(response))
     df.columns = [col.replace('_', ' ') if col_name not in col else col.replace(f'{col_name} ','') for col in df.columns]
-    print(df.columns)
+    
+    
     if 'mba order' in df.columns:
         df.drop('mba order', axis = 1, inplace = True)
+
+    df = date_column_format(df, date_columns)
+    df = dollar_sign(df, dollar_columns)
+    df = percentage_sign(df, percentage_columns)
+    
     return df
 
 def pst_file_prep(sdk, user_client, pst_look_ids):
 
     tmp_file = '/tmp/report.xlsx'
-    pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
-
-    date_columns = ['Trade Date', 'First Pay Date', 'Maturity Date', 'Next Payment Date','Last Payment Date', 'Loan Comments Added Date','Legal Comments Added Date','Breezeway Paid Off Date', 'Servicer Paid Off Date','Original Maturity Date']
-    for date_column in date_columns:
-        pst_all_loans[date_column] = pd.to_datetime(pst_all_loans[date_column], format='%m/%d/%Y')
-
-    all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
+    pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_all_loans'],'Payment Status Tracker')
+    all_loans_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
     bridge_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_bridge_summary'], 'Pst Bridge Summary')
     dscr_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_dscr_summary'],'Pst Dscr Summary')
 
-    pst_summary = pd.concat([all_loans,bridge_summary,dscr_summary], axis=1)
+    empty_column = pd.DataFrame({ ' ': [np.nan] * len(bridge_summary) })
+
+    pst_summary = pd.concat([all_loans_summary,empty_column,empty_column,bridge_summary,empty_column,empty_column,dscr_summary], axis=1)
 
     with pd.ExcelWriter(tmp_file, engine='openpyxl') as writer:
         pst_summary.to_excel(writer, index=False, header=True, sheet_name='Summary', startrow=1)
@@ -144,13 +171,13 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
     ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
 
 
-    ws.merge_cells('F1:I1')
-    ws['F1'] = 'Bridge'
-    ws['F1'].alignment = Alignment(horizontal='center', vertical='center')
+    ws.merge_cells('G1:J1')
+    ws['G1'] = 'Bridge'
+    ws['G1'].alignment = Alignment(horizontal='center', vertical='center')
 
-    ws.merge_cells('K1:N1')
-    ws['K1'] = 'DSCR'
-    ws['K1'].alignment = Alignment(horizontal='center', vertical='center')
+    ws.merge_cells('M1:P1')
+    ws['M1'] = 'DSCR'
+    ws['M1'].alignment = Alignment(horizontal='center', vertical='center')
 
     pst_buffer = io.BytesIO()
     wb.save(pst_buffer)
@@ -160,9 +187,6 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
 def wells_file_prep(sdk, user_client, wells_look_id):
 
     wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
-    date_columns = ['Note Date','First Pay Date','Original Maturity Date','Current Maturity Date','Trade Date','Trade Finance Date','Int Accrual Date','Updated Appraisal or BPO Value Date','Issued Cut Off Date','Sale Date','Current Maturity Date By Cycle','Property Acquire Dt','Orig Fico Date','Original Appraisal Date']
-    for date_column in date_columns:
-        wells_df[date_column] = pd.to_datetime(wells_df[date_column], format='%m/%d/%Y')
     wells_buffer = io.BytesIO()
     wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, wells_buffer, wells_box_folder_id, wells_file_name)
