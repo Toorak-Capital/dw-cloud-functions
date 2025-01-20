@@ -8,6 +8,9 @@ look_ids = {'pending diligence': 103}
 if env == 'dev':
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
+    email_type = 'Test'
+
     CAEmailRecipients = [{"email":"sasi.jyothsna@triconinfotech.com","name":"Sasi Jyothsna"},
                     {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"},
                    {"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"},
@@ -26,6 +29,8 @@ if env == 'dev':
 else:
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
+    email_type = ''
     
     CAEmailRecipients = [{"email":'ZGribben@ca-usa.com',"name":"ZGribben"},
                         {"email":'WTai@ca-usa.com',"name":"WTai"},

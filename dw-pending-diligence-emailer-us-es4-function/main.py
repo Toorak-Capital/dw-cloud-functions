@@ -85,7 +85,7 @@ date_for_mail = custom_strftime('%B {S}, %Y', datetime.now())
 ca_file_path='/tmp/ca_file.xlsx'
 opus_file_path='/tmp/opus_file.xlsx'
 
-file_name = f'Pending Diligence Action Report - {date_for_mail}'
+file_name = f'{email_type} Pending Diligence Action Report - {date_for_mail}'.lstrip()
 
 storage_client = storage.Client(project = project_id)
 
