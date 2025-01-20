@@ -6,12 +6,16 @@ project_id = os.environ.get('project_id', 'toorak-396910')
 box_folder_id = '240730218734'
 look_id = {'wells_ips' : '250',
             'pst' :{'pst_all_loans' : '251',
-            'pst_summary' : '250',
-            'pst_bridge_summary' : '250',
-            'pst_dscr_summary' : '250'}}
+            'pst_summary' : '252',
+            'pst_bridge_summary' : '253',
+            'pst_dscr_summary' : '254'}}
 
 wells_box_folder_id = '240730218734'
 pst_box_folder_id = '302849922519'
+
+date_columns = ['Breezeway Paid Off Date','Current Maturity Date','Current Maturity Date By Cycle','First Pay Date','Int Accrual Date','Issued Cut Off Date','Last Payment Date','Legal Comments Added Date','Loan Comments Added Date','Maturity Date','Next Payment Date','Note Date','Orig Fico Date','Original Appraisal Date','Original Maturity Date','Property Acquire Dt','Sale Date','Servicer Paid Off Date','Trade Date','Trade Finance Date','Updated Appraisal or BPO Value Date']
+dollar_columns = ['Servicer UPB','UnappliedBalance','Principal and Interest','Taxes and Insurance','Total of Principal Interest Taxes and Insurance','Sum of Servicer Upb']
+percentage_columns = ['Percentage of Servicer Upb']
 
 if env == 'prod':
     
