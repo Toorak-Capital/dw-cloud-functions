@@ -103,9 +103,9 @@ def check_pipeline_run(request):
     box_looker_conn()
 
     return {
-        'statusCode': 200,
-        'body': json.dumps('All files are uploaded to box')
-    }
+            'statusCode': 200,
+            'body': f"uploaded all files into box"
+        }  
 
 def dollar_sign(df,columns):
     
@@ -133,7 +133,8 @@ def percentage_sign(df,columns):
 
 def run_look_and_clean_df(sdk, look_id, col_name):
     
-    response = sdk.run_look(look_id, "csv")
+    row_limit = 7000
+    response = sdk.run_look(look_id, "csv", limit = row_limit)
     df = pd.read_csv(io.StringIO(response))
     df.columns = [col.replace('_', ' ') if col_name not in col else col.replace(f'{col_name} ','') for col in df.columns]
     
