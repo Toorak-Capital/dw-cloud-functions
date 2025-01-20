@@ -10,3 +10,4 @@ paramiko
 requests
 boxsdk
 boxsdk[jwt]
+google-cloud-bigquery
