@@ -50,7 +50,7 @@ def query_bigquery():
     result = False
 
     query = """
-        SELECT * FROM reporting.dw_pipeline_log WHERE run_finished_time >= DATETIME(CONCAT(CAST(CURRENT_DATE("Asia/Calcutta") AS STRING), ' 12:30:00')) LIMIT 1
+        SELECT * FROM reporting.dw_pipeline_log WHERE run_finished_time >= DATETIME(CONCAT(CAST(CURRENT_DATE("Asia/Calcutta") AS STRING), ' 17:30:00')) LIMIT 1
     """
 
     query_job = client.query(query)
@@ -103,34 +103,53 @@ def check_pipeline_run(request):
     box_looker_conn()
 
     return {
-            'statusCode': 200,
-            'body': f"uploaded all files into box"
-        }  
+        'statusCode': 200,
+        'body': json.dumps({"message": "uploaded all files into box"})
+    }
 
-def dollar_sign(df,columns):
+def dollar_sign(df,float_columns):
     
     # Add $ sign to float columns
-    for col in columns:
+    
+    for col in float_columns:
         if col in list(df.columns):
-            df[col] = df[col].apply(lambda x: f'${x:,.2f}')
+            print(col)
+            df[col] = df[col].astype(float)
+            df[col] = df[col].apply(lambda x: f'${x:,.2f}' if pd.notna(x) else np.nan)
+    return df
+    
+def percentage_sign(df,float_columns):
+    
+    # Add $ sign to float columns
+    for col in float_columns:
+        if col in list(df.columns):
+            print(col)
+            df[col] = df[col].astype(float)
+            df[col] = df[col].apply(lambda x: f'{x*100:,.2f}%' if pd.notna(x) else np.nan)
     return df
 
 def date_column_format(df,columns):
-    
-    # Add $ sign to float columns
-    for col in columns:
-        if col in list(df.columns):
-            df[col] = pd.to_datetime(df[col], format='%m/%d/%Y')
-    return df
-    
-def percentage_sign(df,columns):
-    
-    # Add $ sign to float columns
-    for col in columns:
-        if col in list(df.columns):
-            df[col] = df[col].apply(lambda x: f'{x*100:,.2f}%')
-    return df
 
+    for col in columns:
+        if col in df.columns:
+            print(f"Processing column: {col}")
+    
+            def safe_to_datetime(date_str):
+                try:
+                    
+                    return pd.to_datetime(date_str, format='%m/%d/%Y')
+                except pd.errors.OutOfBoundsDatetime:
+                    
+                    return date_str
+                except Exception as e:
+                    
+                    print(f"Error parsing date '{date_str}': {e}")
+                    return date_str
+    
+            df[col] = df[col].apply(safe_to_datetime)
+    
+    return df
+    
 def run_look_and_clean_df(sdk, look_id, col_name):
     
     row_limit = 7000
@@ -150,6 +169,7 @@ def run_look_and_clean_df(sdk, look_id, col_name):
 
 def pst_file_prep(sdk, user_client, pst_look_ids):
 
+    print('inside pst prep')
     tmp_file = '/tmp/report.xlsx'
     pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_all_loans'],'Payment Status Tracker')
     all_loans_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
@@ -187,6 +207,7 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
 
 def wells_file_prep(sdk, user_client, wells_look_id):
 
+    print('inside wells prep')
     wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
     wells_buffer = io.BytesIO()
     wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
