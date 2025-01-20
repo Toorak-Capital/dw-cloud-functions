@@ -5,7 +5,18 @@ project_id = os.environ.get('project_id', 'np-toorak')
 
 
 
-monthly_files_bucket_folders_dest = [{'CPUInterestRateTracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'PostPurchaseLoanData/to-process-v2/CPUInterestRateTracker', 18)},
+
+monthly_files_bucket_folders_dest_2nd = [
+        {'FCI_suspense_balance_report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/suspense_balance_report', 7)},
+        {'FCI_FPI': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/fpi', 7)},
+        {'FCI_TOS': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/TOS', 7)},
+        {'BSI_ToorakMonthlyAdvanceSummary': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI/to-process-v2/ToorakMonthlyAdvanceSummary', 7)},
+        ]
+
+
+monthly_files_bucket_folders_dest_18th = [
+        {'BSI_force_placed_insurance': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI-Merchants/to-process-v2/force_placed_insurance', 18)},
+        {'CPUInterestRateTracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'PostPurchaseLoanData/to-process-v2/CPUInterestRateTracker', 18)},
         {'toorak_agg': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Repo/toorak_agg', 18)},
         {'nationstar_monthly_remittance': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Repo/nationstar_monthly_remittance', 18)}
         ]
