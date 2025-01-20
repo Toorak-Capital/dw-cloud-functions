@@ -216,5 +216,5 @@ def box_looker_conn():
     os.environ['LOOKERSDK_CLIENT_SECRET'] = looker_creds['LOOKERSDK_CLIENT_SECRET']
     sdk = looker_sdk.init40()
 
-    pst_buffer = pst_file_prep(sdk, user_client, look_id['pst'])
-    wells_buffer = wells_file_prep(sdk, user_client, look_id['wells_ips'])
+    pst_file_prep(sdk, user_client, look_id['pst'])
+    wells_file_prep(sdk, user_client, look_id['wells_ips'])
