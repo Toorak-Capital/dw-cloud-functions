@@ -103,9 +103,9 @@ def check_pipeline_run(request):
     box_looker_conn()
 
     return {
-            'statusCode': 200,
-            'body': f"uploaded all files into box"
-        }  
+        'statusCode': 200,
+        'body': json.dumps('All files are uploaded to box')
+    }
 
 def dollar_sign(df,columns):
     
