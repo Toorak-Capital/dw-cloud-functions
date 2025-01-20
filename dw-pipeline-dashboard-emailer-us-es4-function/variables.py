@@ -16,6 +16,9 @@ look_ids = {'all sheet': 67,
 if env == 'dev':
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
+    email_type = 'Test'
+
     email_recipients = [{"email":"sasi.jyothsna@triconinfotech.com","name":"Sasi Jyothsna"},
                     {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"},
                    {"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"},
@@ -29,6 +32,9 @@ if env == 'dev':
 else:
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
+    email_type = ''
+
     email_recipients = [{"email":'jbeacham@toorakcapital.com',"name":"john"},
                         {"email":'kparekh@toorakcapital.com',"name":"ketan"},
                         {"email":'svenugopal@toorakcapital.com',"name":"sachin"},

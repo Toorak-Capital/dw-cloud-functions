@@ -8,6 +8,9 @@ look_ids = {'dashboard_id': 75}
 if env == 'prod':
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
+    email_type = ''
+
     email_recipients = [{"email":'jbeacham@toorakcapital.com',"name":"john"},
                         {"email":'svenugopal@toorakcapital.com',"name":"sachin"},
                         {"email":'jkuppuswamy@toorakcapital.com',"name":"jaya"},
@@ -33,6 +36,9 @@ if env == 'prod':
 else:
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
+    email_type = 'Test'
+
     email_recipients = [{"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"},
                         {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"}]
     

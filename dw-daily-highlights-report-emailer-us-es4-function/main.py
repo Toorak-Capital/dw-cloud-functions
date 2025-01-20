@@ -51,7 +51,7 @@ def get_secret(secret_id):
     
 date_for_mail = custom_strftime('%B {S}, %Y', datetime.now())
 
-file_name = f'Toorak Daily Highlights Report - {date_for_mail}'
+file_name = f'{email_type} Toorak Daily Highlights Report - {date_for_mail}'.lstrip()
 
 storage_client = storage.Client(project = project_id)
 

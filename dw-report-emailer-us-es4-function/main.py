@@ -122,17 +122,17 @@ def check_log_file_in_gcs(bucket_name):
 def lambda_handler(request):
     request_json = request.get_json(silent=True)
     if request_json['report'] == 'table_funding':  
-            file_name = f'Table Funding Pipeline Report - {date_for_mail}'
+            file_name = f'{email_type} Table Funding Pipeline Report - {date_for_mail}'.lstrip()
             response = table_funding_report(file_name, sdk, email_api, bucket, get_bucket)
             
     elif request_json['report'] == 'ca_diligence_submission':
             dd_firm = 'Consolidated Analytics'
-            file_name = f'Diligence Submission Report - {date_for_mail}'
+            file_name = f'{email_type} Diligence Submission Report - {date_for_mail}'.lstrip()
             response = diligence_submission_emailer(file_name, dd_firm, sdk, email_api, bucket, get_bucket)
             
     elif request_json['report'] == 'opus_diligence_submission':
             dd_firm = 'Opus'
-            file_name = f'Diligence Submission Report - {date_for_mail}'
+            file_name = f'{email_type} Diligence Submission Report - {date_for_mail}'.lstrip()
             response = diligence_submission_emailer(file_name, dd_firm, sdk, email_api, bucket, get_bucket)
     
     
@@ -154,15 +154,15 @@ def lambda_handler(request):
             print("Received JSON:", request_json)
 
         if request_json['report'] == 'merchant_weekly':
-            file_name = f'Merchants Weekly Report - {date_for_mail}'
+            file_name = f'{email_type} Merchants Weekly Report - {date_for_mail}'.lstrip()
             response = merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket)
             
         elif request_json['report'] == 'uk_weekly':
-            file_name = f'UK Weekly Report - {date_for_mail}'
+            file_name = f'{email_type} UK Weekly Report - {date_for_mail}'.lstrip()
             response = uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket)
 
         elif request_json['report'] == 'pst_daily':
-            file_name = f'Payment Status Tracker Report - {date_for_mail}'
+            file_name = f'{email_type} Payment Status Tracker Report - {date_for_mail}'.lstrip()
             response = pst_emailer(file_name, sdk, email_api, bucket, get_bucket)
         
         
@@ -171,7 +171,7 @@ def lambda_handler(request):
             start_date = (today_date - timedelta(days=7)).strftime('%m/%d/%Y')
             end_date = (today_date - timedelta(days=1)).strftime('%m/%d/%Y')
             email_body = f'duration {start_date} to {end_date}'       
-            file_name = f'Risk Score Report - {date_for_mail}'
+            file_name = f'{email_type} Risk Score Report - {date_for_mail}'.lstrip()
             response = risk_score_emailer(file_name, frequency, email_body, sdk, email_api, bucket, get_bucket)
         
         elif request_json['report'] == 'risk_score_monthly_report':
@@ -180,7 +180,7 @@ def lambda_handler(request):
             if email_flag : 
                 month_year = custom_strftime('%B-%Y', today_date)
                 email_body = f'month of {month_year}'
-                file_name = f'Risk Score Report - {date_for_mail}'
+                file_name = f'{email_type} Risk Score Report - {date_for_mail}'.lstrip()
                 response = risk_score_emailer(file_name, frequency, email_body, sdk, email_api, bucket, get_bucket)
             else:
                 print("email is not sent cuz it's not the first day of the month or a weekend")

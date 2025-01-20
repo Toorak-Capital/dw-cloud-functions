@@ -58,7 +58,7 @@ def export_excel(df):
 
 def report(path, report_type):
     
-    file_name = f'Audit {report_type} Report - {date_for_mail}'
+    file_name = f'{email_type} Audit {report_type} Report - {date_for_mail}'.lstrip()
     storage_client = storage.Client(project="toorak-396910")
     i= path
     bucket = storage_client.get_bucket("dw-prod-bronze-purchased-loan-us-es4-gcs")
