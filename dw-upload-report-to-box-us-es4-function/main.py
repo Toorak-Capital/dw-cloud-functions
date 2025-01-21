@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 import json
 import io
-import logging
 import boxsdk
 from json import loads
 from boxsdk import JWTAuth,Client
@@ -19,6 +18,12 @@ from google.cloud import secretmanager_v1
 import openpyxl
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment
+# Imports the Cloud Logging client library
+import google.cloud.logging
+# Instantiates a client
+client = google.cloud.logging.Client()
+client.setup_logging()
+import logging
 
 todays_date = datetime.now().strftime("%m-%d-%Y")
 wells_file_name = f'DW - Wells IPS {todays_date}.xlsx'
@@ -58,7 +63,7 @@ def query_bigquery():
     results = query_job.result()  # Waits for the job to complete
     for row in results:
         date = row['run_finished_time'].date()
-        print(date)
+        logging.info(date)
         if date == datetime.now().date():
             result = True
     return result
@@ -96,16 +101,24 @@ def get_secret(secret_id):
 @functions_framework.http
 def check_pipeline_run(request):
 
-  log_file_exists = check_log_file_in_gcs(log_bucket_name)
-  pipeline_ran_today = query_bigquery()
+    log_file_exists = check_log_file_in_gcs(log_bucket_name)
+    pipeline_ran_today = query_bigquery()
 
-  if log_file_exists or not pipeline_ran_today:
-    box_looker_conn()
+    if log_file_exists or not pipeline_ran_today:
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps({"message": "uploaded all files into box"})
-    }
+        logging.info('Either files are missing or Pipeline did not ran. Cannot send emails')
+            return {
+            'statusCode': 500,
+            'body': json.dumps('Either files are missing or Pipeline did not ran. Cannot send emails')
+        }
+    else:
+
+        box_looker_conn()
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps({"message": "uploaded all files into box"})
+        }
 
 def dollar_sign(df,float_columns):
     
@@ -113,7 +126,7 @@ def dollar_sign(df,float_columns):
     
     for col in float_columns:
         if col in list(df.columns):
-            print(col)
+            logging.info(col)
             df[col] = df[col].astype(float)
             df[col] = df[col].apply(lambda x: f'${x:,.2f}' if pd.notna(x) else np.nan)
     return df
@@ -123,7 +136,7 @@ def percentage_sign(df,float_columns):
     # Add $ sign to float columns
     for col in float_columns:
         if col in list(df.columns):
-            print(col)
+            logging.info(col)
             df[col] = df[col].astype(float)
             df[col] = df[col].apply(lambda x: f'{x*100:,.2f}%' if pd.notna(x) else np.nan)
     return df
@@ -132,7 +145,7 @@ def date_column_format(df,columns):
 
     for col in columns:
         if col in df.columns:
-            print(f"Processing column: {col}")
+            logging.info(col)
     
             def safe_to_datetime(date_str):
                 try:
@@ -143,7 +156,7 @@ def date_column_format(df,columns):
                     return date_str
                 except Exception as e:
                     
-                    print(f"Error parsing date '{date_str}': {e}")
+                    logging.info(f"Error parsing date '{date_str}': {e}")
                     return date_str
     
             df[col] = df[col].apply(safe_to_datetime)
@@ -169,7 +182,8 @@ def run_look_and_clean_df(sdk, look_id, col_name):
 
 def pst_file_prep(sdk, user_client, pst_look_ids):
 
-    print('inside pst prep')
+
+    logging.info('inside pst prep')
     tmp_file = '/tmp/report.xlsx'
     pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_all_loans'],'Payment Status Tracker')
     all_loans_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
@@ -207,7 +221,7 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
 
 def wells_file_prep(sdk, user_client, wells_look_id):
 
-    print('inside wells prep')
+    logging.info('inside wells prep')
     wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
     wells_buffer = io.BytesIO()
     wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
@@ -218,7 +232,7 @@ def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
 
     buffer.seek(0)
     uploaded_file = user_client.folder(box_folder_id).upload_stream(buffer, file_name=file_name)
-    print(f"{file_name} is uploaded to box successfully")
+    logging.info(f"{file_name} is uploaded to box successfully")
 
 
 
