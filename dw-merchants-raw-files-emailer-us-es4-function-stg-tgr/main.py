@@ -135,7 +135,7 @@ def trigger_on_bsi_merchants_upload(cloudevent):
 
     logging.info('job added')
 
-    title_ = f'Merchant Files on {(date.today()).strftime("%m-%d-%Y")}'
+    title_ = f'{email_type} Merchant Files on {(date.today()).strftime("%m-%d-%Y")}'.lstrip()
     body_ = """<html>
                 <head>
                 <ul id="ul-img" style="list-style-type: none;margin: 0;padding: 0;background-color: #0fcbef;width: 100%;height: 60px;border-radius: 4px;background-image: -webkit-linear-gradient(97deg, #0fcbef 4%, #1071ee 90%) !important;">

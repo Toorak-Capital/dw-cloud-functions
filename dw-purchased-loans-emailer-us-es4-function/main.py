@@ -51,7 +51,7 @@ end_date = (today - timedelta(days=3)).strftime("%m-%d-%Y")
 file_path='/tmp/report.xlsx'
 
 date_for_mail = custom_strftime('%B {S}, %Y', datetime.now())
-file_name = f'Purchased Loans - {start_date} to {end_date}'
+file_name = f'{email_type} Purchased Loans - {start_date} to {end_date}'.lstrip()
 
 storage_client = storage.Client(project = project_id)
 

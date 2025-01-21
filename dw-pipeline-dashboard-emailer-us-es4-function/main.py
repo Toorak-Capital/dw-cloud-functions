@@ -107,7 +107,7 @@ def get_secret(secret_id):
 date_for_mail = custom_strftime('%B {S}, %Y', datetime.now())
 file_path='/tmp/report.xlsx'
 
-file_name = f'Pipeline Dashboard - {date_for_mail}'
+file_name = f'{email_type} Pipeline Dashboard - {date_for_mail}'.lstrip()
 
 storage_client = storage.Client(project = project_id)
 

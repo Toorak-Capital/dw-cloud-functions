@@ -14,6 +14,8 @@ if env == 'dev':
     
     secret_name = {'email_api' : 'dw-np-noreply-email-api-key-sm-us-ct1',
                    'looker_creds' : 'looker-creds-dev-dw-ue1-sm'}
+
+    email_type = 'Test'
     
     secret_project_id = 280549663966
     
@@ -32,5 +34,7 @@ else:
     
     secret_name = {'email_api' : 'dw-noreply-email-api-key',
                    'looker_creds' : 'looker-creds-prod-dw-ue1-sm'}
+
+    email_type = ''
     
     secret_project_id = 947624841920

@@ -11,3 +11,4 @@ requests
 boxsdk
 boxsdk[jwt]
 google-cloud-bigquery
+google-cloud-logging
