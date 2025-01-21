@@ -5,6 +5,18 @@ project_id = os.environ.get('project_id', 'np-toorak')
 
 
 
+monthly_files_bucket_folders_dest = [{'CPUInterestRateTracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'PostPurchaseLoanData/to-process-v2/CPUInterestRateTracker', 18)},
+        {'toorak_agg': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Repo/toorak_agg', 18)},
+        {'nationstar_monthly_remittance': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Repo/nationstar_monthly_remittance', 18)}
+        ]
+
+
+rsd_bucket_folder_pairs_dest = [{'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Extension Tracker', 0)},
+        {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Report/', 0)},
+        {'RSD_Master RSD Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master RSD Report', 0)},
+        {'RSD_Master Special Servicing Weekly': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Special Servicing Weekly', 0)}
+        ]
+
 bucket_folder_pairs_dest = [
         {'RCN': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'RCN/to-process-v2/DailyTrialBalance', 0)},
         {'BSI_Toorak_LoanAdmin': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI/to-process-v2/Toorak_LoanAdmin', 0)},
@@ -19,11 +31,7 @@ bucket_folder_pairs_dest = [
         {'FCI_getACHStatus': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/getACHStatus', 0)},
         {'FCI_loan_portfolio_information': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/loan_portfolio_information', 0)},
         {'BSI-Merchants': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI-Merchants/to-process-v2/Status', 0)},
-        {'BZ': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/to-process-v2', 0)},
-        {'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Extension Tracker', 0)},
-        {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Report/', 0)},
-        {'RSD_Master RSD Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master RSD Report', 0)},
-        {'RSD_Master Special Servicing Weekly': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Special Servicing Weekly', 0)},
+        {'BZ': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/to-process-v2', 0)}
     ]
 
 if env == 'prod':
@@ -34,7 +42,8 @@ if env == 'prod':
         {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
         {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
         {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"},
-        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"}
+        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"},
+        {"email":"diguvamaheshwarsingh@triconinfotech.com", "name":"mahesh"}
         ]
 else:
     Recipients = [
@@ -44,10 +53,11 @@ else:
         {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
         {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
         {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"},
-        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"}
+        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"},
+        {"email":"diguvamaheshwarsingh@triconinfotech.com", "name":"mahesh"}
         ]
     
-SendEmailCFUrl = f'https://us-east4-{project_id}.cloudfunctions.net/dw-send-email-us-es4-cf'
+SendEmailCFUrl = f'https://us-east4-{project_id}.cloudfunctions.net/dw-prod-send-email-us-es4-cf'
 Subject = 'Alert: Missing Servicer Files'
 
 

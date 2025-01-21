@@ -76,9 +76,9 @@ def send_mail(title, html, attachments):
 def trigger_on_bsi_merchants_upload(cloudevent):
     '''
     '''
-    payload = cloudevent.data.get("protoPayload")    
-    event = {"resourceName": payload.get('resourceName')} 
-    logging.info("event: %s", event)
+    payload = cloudevent.data.get("protoPayload")
+    file_path = payload.get('resourceName', '')
+    logging.info("file_path: %s", file_path)
     
     storage_client = storage.Client()  
     blobs = storage_client.list_blobs(SourceBucket, prefix=SourcePrefix)
@@ -86,7 +86,7 @@ def trigger_on_bsi_merchants_upload(cloudevent):
     attachments_ = {}
     key_list = [blob.name for blob in blobs if previous_sunday_date <= blob.updated.replace(tzinfo=None)]
     
-    if len(key_list) < 4:
+    if len(key_list) < 4 or 'YTD PRODUCTION' not in file_path.upper():
         logging.info('Key list is not met the expected count %s:', key_list)
         return {
             'statusCode': 400,

@@ -105,16 +105,21 @@ def write_parquet_file(df, file_date, warehouseline,type):
     df.to_parquet(file_path, compression='snappy')
 
 def trigger_on_repo_file_upload(cloudevent, context):
+    '''
+    '''
     string_data = cloudevent.decode('utf8')
     json_data = json.loads(string_data)
-
     payload = json_data.get("protoPayload")
+
     file_path = payload.get('resourceName')
     print(f'file_path={file_path}')
+
     file_name = file_path.split('/')[-1]
     print(f'file_name={file_name}')
+
     source_bucket = file_path.split('/')[3]
     print(f'source_bucket={source_bucket}')
+
     file_path = file_path.replace('projects/_/buckets/','').replace('objects/','')
     file_name = file_name.lower()
 
@@ -128,17 +133,19 @@ def trigger_on_repo_file_upload(cloudevent, context):
     }
     warehouselines = ['ms','db','jpm','bawag','churchill','axos','equity','transaction','toorak_agg','toorak']
     if not any(warehouseline in file_name for warehouseline in warehouselines):
+        print(response_body)
         return {
-        'statusCode': 200,
-        'body': json.dumps('not an valid repo file')
-    }
+            'statusCode': status_code,
+            'body': json.dumps(response_body)
+        }
 
     file_types = ['tape','payoff','transaction','toorak_agg']
     if not any(file_type in file_name for file_type in file_types):
+        print(response_body)
         return {
-        'statusCode': 200,
-        'body': json.dumps('not an valid repo file')
-    }
+            'statusCode': status_code,
+            'body': json.dumps(response_body)
+        }
 
     is_transaction_file = False
     sheet_name =''
@@ -166,6 +173,8 @@ def trigger_on_repo_file_upload(cloudevent, context):
     elif 'toorak_agg' in file_name:
         is_monthly_paydown_file = True
     else:
+        response_body = 'incorrect format or corrupted data'
+        print(response_body)
         return {
         'statusCode': 200,
         'body': json.dumps(response_body)
@@ -182,7 +191,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
     elif 'toorak_agg' in file_name:
         monthly_paydown_df,file_date = get_sheet_data(file_path,type='toorak_agg')
         if not monthly_paydown_df.empty and len(monthly_paydown_df.columns) != 0:
-            write_parquet_file(monthly_paydown_df,file_date,warehouseline,type='toorak_agg')    
+            write_parquet_file(monthly_paydown_df,file_date,warehouseline='',type='toorak_agg')    
     else:
         if not is_payoff:
             tape_df,file_date = get_sheet_data(file_path,type='tape')

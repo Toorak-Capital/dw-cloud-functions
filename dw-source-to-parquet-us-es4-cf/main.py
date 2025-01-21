@@ -17,6 +17,7 @@ from bsi_monthly import *
 from nation_star import *
 from toorak_servicer import *
 from cpu_interest_rate import *
+from asset_management import *
 
 
 
@@ -94,8 +95,10 @@ def lambda_handler(request, context):
     elif event_type == 'OBJECT_FINALIZE' and 'PostPurchaseLoanData/Toorak' in file_path:
         trigger_on_toorak_servicer_report(file_path, file_uri)
         print("Uploaded Toorak Servicer successfully")
-    elif event_type == 'OBJECT_FINALIZE' and 'postpurchaseloandata/postpurchaseloandata_nationstar' in file_uri.lower():
-        trigger_on_nation_star_upload(file_uri)
+
+    elif event_type == 'OBJECT_FINALIZE' and 'ToorakAssetManagement/AM Consolidated' in file_path:
+        trigger_on_am_report(file_path, file_uri)
+        print("Uploaded Toorak Asset Management successfully")
     else:
         print("Nothing happened")
     

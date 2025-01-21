@@ -1,0 +1,17 @@
+functions-framework==3.*
+google-cloud-secret-manager
+pandas
+numpy
+pysftp
+openpyxl
+google-cloud-storage
+paramiko
+requests
+secure-smtplib
+mime
+#email
+google-cloud-dataproc==5.6.0
+grpcio
+google-cloud-dms
+boxsdk
+sib_api_v3_sdk
