@@ -107,9 +107,9 @@ def check_pipeline_run(request):
     if log_file_exists or not pipeline_ran_today:
 
         logging.info('Either files are missing or Pipeline did not ran. Cannot send emails')
-            return {
-            'statusCode': 500,
-            'body': json.dumps('Either files are missing or Pipeline did not ran. Cannot send emails')
+        return {
+        'statusCode': 500,
+        'body': json.dumps('Either files are missing or Pipeline did not ran. Cannot send emails')
         }
     else:
 
