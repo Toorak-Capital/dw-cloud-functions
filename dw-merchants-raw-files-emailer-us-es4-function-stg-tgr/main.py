@@ -61,7 +61,7 @@ def send_mail(title, html, attachments):
         base64_message = encoded_string.decode('utf-8')
         attachment.append({"content":base64_message, "name":file_name})
 
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=email_recipients, html_content=html, sender=sender_email, subject=title, headers=headers,attachment=attachment)
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=email_recipients, cc=email_recipients_cc, html_content=html, sender=sender_email, subject=title, headers=headers,attachment=attachment)
 
     try:
         api_response = api_instance.send_transac_email(send_smtp_email)
