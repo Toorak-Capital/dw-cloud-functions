@@ -382,6 +382,7 @@ def pipeline_dashboard():
 
     sender_ = sender_email
     recipients_ = email_recipients
+    cc_ = email_recipients_cc
     print(recipients_)
     title_ = file_name
     text_ = 'this is test'
@@ -471,12 +472,12 @@ def pipeline_dashboard():
             </html>""".format('Grand Total',values_list[3],values_list[4],values_list[5],'Grand Total',values_list[0],values_list[1],values_list[2],'Grand Total',values_list[6],values_list[7],values_list[8])
    
     body_ = body_.replace('date_for_sending_email', date_for_mail).replace('post_close_data',post_df_html).replace('pre_close_data',pre_df_html).replace('post_channel_html',post_channel_html).replace('pre_channel_html',pre_channel_html).replace('agg_channel_html',agg_channel_html)
-    response=send_mail(sender_, recipients_, title_, text_, body_, attachments_,file_name)
+    response=send_mail(sender_, cc_, recipients_, title_, text_, body_, attachments_,file_name)
     
 
 
 
-def send_mail(sender, recipients, title, text, html, attachments,filename):
+def send_mail(sender, recipients, cc, title, text, html, attachments,filename):
     """
     Send email to recipients. Sends one mail to all recipients.
     The sender needs to be a verified email in SES.
@@ -497,7 +498,7 @@ def send_mail(sender, recipients, title, text, html, attachments,filename):
     base64_message = encoded_string.decode('utf-8')
     filename+=".xlsx"
     attachment = [{"content":base64_message,"name":filename}]
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, html_content=html, sender=sender, subject=title,headers=headers,attachment=attachment)
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, html_content=html, sender=sender, cc=cc, subject=title,headers=headers,attachment=attachment)
 
     #return ses_client.send_raw_email(Source=sender,Destinations=recipients,RawMessage={'Data': msg.as_string()})
     try:

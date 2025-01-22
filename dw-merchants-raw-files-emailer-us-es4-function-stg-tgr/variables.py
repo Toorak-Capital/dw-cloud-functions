@@ -20,16 +20,16 @@ if env == 'prod':
         {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
         {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
         {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen Kumar"},
-        {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"},
-        {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"}]
+        {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"}]
+    
+    email_recipients_cc = [{"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
 else:
     secret_name = {'email_api' : 'dw-np-noreply-email-api-key-sm-us-ct1',
                    'looker_creds' : 'looker-creds-dev-dw-ue1-sm'}
 
     email_type = 'Test'
 
-    email_recipients = [
-        {"email":"sasi.jyothsna@triconinfotech.com","name":"Sasi Jyothsna"}, 
-        {"email":"praveenkumar.vs@triconinfotech.com","name":"Praveen"}, 
-        {"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"}
-        ]
+    email_recipients = [{"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"},
+                            {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"}]
+    
+    email_recipients_cc = [{"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]

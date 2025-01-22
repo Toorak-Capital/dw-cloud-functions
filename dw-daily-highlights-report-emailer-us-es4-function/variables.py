@@ -25,8 +25,9 @@ if env == 'prod':
                         {"email":'sgoldman@toorakcapital.com',"name":"Scott Goldman"},
                         {"email":'cmacintosh@toorakcapital.com',"name":"Macintosh"},
                         {"email":'lberger@toorakcapital.com',"name":"Lincoln Berger"},
-                        {"email":'cschollmeyer@toorakcapital.com',"name":"Caryn Schollmeyer"},
-                        {"email":'ToorakDataTeam@triconinfotech.com',"name":"Toorak Data Team"}]
+                        {"email":'cschollmeyer@toorakcapital.com',"name":"Caryn Schollmeyer"}]
+    
+    email_recipients_cc = [{"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
     
     secret_name = {'email_api' : 'dw-noreply-email-api-key',
                    'looker_creds' : 'looker-creds-prod-dw-ue1-sm'}
@@ -40,7 +41,9 @@ else:
     email_type = 'Test'
 
     email_recipients = [{"email":'vijaylaxmi@triconinfotech.com',"name":"laxmi"},
-                        {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"}]
+                            {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"}]
+    
+    email_recipients_cc = [{"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
     
     secret_name = {'email_api' : 'dw-np-noreply-email-api-key-sm-us-ct1',
                    'looker_creds' : 'looker-creds-dev-dw-ue1-sm'}
