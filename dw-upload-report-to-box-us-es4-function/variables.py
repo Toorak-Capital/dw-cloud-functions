@@ -6,9 +6,10 @@ project_id = os.environ.get('project_id', 'toorak-396910')
 box_folder_id = '240730218734'
 look_id = {'wells_ips' : '250',
             'pst' :{'pst_all_loans' : '251',
-            'pst_summary' : '252',
-            'pst_bridge_summary' : '253',
-            'pst_dscr_summary' : '254'}}
+                    'pst_summary' : '252',
+                    'pst_bridge_summary' : '253',
+                    'pst_dscr_summary' : '254'},
+            'wells_comparator' : '255'}
 
 wells_box_folder_id = '240730218734'
 pst_box_folder_id = '302849922519'
