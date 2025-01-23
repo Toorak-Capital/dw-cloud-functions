@@ -68,9 +68,8 @@ def lambda_handler(request, context):
         trigger_on_lima_upload(file_path, file_uri)
         print("Uploaded lima successfully")
 
-    elif event_type == 'OBJECT_FINALIZE' and 'RCN/Daily-RCN/' in file_path:
-        trigger_on_rcn_upload(file_path, file_uri)
-        print("Uploaded RCN successfully")
+    elif event_type == 'OBJECT_FINALIZE' and 'RCN/' in file_path:
+        return trigger_on_rcn_upload(file_path, file_uri)
 
     elif event_type == 'OBJECT_FINALIZE' and 'RSD/' in file_path:
         trigger_on_rsd_upload(file_path, file_uri)
