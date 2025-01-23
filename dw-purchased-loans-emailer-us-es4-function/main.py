@@ -119,9 +119,11 @@ def purchased_loans_report():
     if dt.time(12,30) <= dt.datetime.now().time()<= dt.time(14,30):
         print('inside if')
         recipients_ = email_recipients
+        cc_ = email_recipients_cc
     else:
         print('inside else')
         recipients_ = email_recipients
+        cc_ = email_recipients_cc
     print(recipients_)
     title_ = file_name
     text_ = 'The text version\nwith multiple lines.'
@@ -140,11 +142,11 @@ def purchased_loans_report():
             </html>"""
     body_ = body_.replace('start_date', str(start_date)).replace('end_date', str(end_date))
     # attachments_ = export_csv(df)
-    response=send_mail(sender_, recipients_, title_, text_, body_, attachments_,file_name)
+    response=send_mail(sender_, recipients_, cc_, title_, text_, body_, attachments_,file_name)
 
 
 
-def send_mail(sender, recipients, title, text, html, attachments,filename):
+def send_mail(sender, recipients, cc, title, text, html, attachments,filename):
     """
     Send email to recipients. Sends one mail to all recipients.
     The sender needs to be a verified email in SES.
@@ -165,7 +167,7 @@ def send_mail(sender, recipients, title, text, html, attachments,filename):
     base64_message = encoded_string.decode('utf-8')
     filename+=".xlsx"
     attachment = [{"content":base64_message,"name":filename}]
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, html_content=html, sender=sender, subject=title,headers=headers,attachment=attachment)
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, cc=cc, html_content=html, sender=sender, subject=title,headers=headers,attachment=attachment)
 
     #return ses_client.send_raw_email(Source=sender,Destinations=recipients,RawMessage={'Data': msg.as_string()})
     try:

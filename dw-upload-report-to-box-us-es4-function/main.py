@@ -107,9 +107,9 @@ def check_pipeline_run(request):
     if log_file_exists or not pipeline_ran_today:
 
         logging.info('Either files are missing or Pipeline did not ran. Cannot send emails')
-            return {
-            'statusCode': 500,
-            'body': json.dumps('Either files are missing or Pipeline did not ran. Cannot send emails')
+        return {
+        'statusCode': 500,
+        'body': json.dumps('Either files are missing or Pipeline did not ran. Cannot send emails')
         }
     else:
 
@@ -150,7 +150,7 @@ def date_column_format(df,columns):
             def safe_to_datetime(date_str):
                 try:
                     
-                    return pd.to_datetime(date_str, format='%m/%d/%Y')
+                    return pd.to_datetime(date_str, format='%m/%d/%Y').date()
                 except pd.errors.OutOfBoundsDatetime:
                     
                     return date_str

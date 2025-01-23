@@ -185,6 +185,7 @@ def tdr_report():
             
     sender_ = sender_email
     title_ = file_name
+    cc_ = email_recipients_cc
     
     text_ = 'The text version\nwith multiple lines.'
     body_ = """<html>
@@ -203,11 +204,11 @@ def tdr_report():
     body_ = body_.replace('date_for_sending_email', date_for_mail)
     attachments_= result
     recipients_ = email_recipients
-    response_ = send_mail(sender_, recipients_, title_, text_, body_, attachments_, file_name)
+    response_ = send_mail(sender_, recipients_, cc_, title_, text_, body_, attachments_, file_name)
         
 
 
-def send_mail(sender, recipients, title, text, html, attachments,filename):
+def send_mail(sender, recipients, cc, title, text, html, attachments,filename):
     """
     Send email to recipients. Sends one mail to all recipients.
     The sender needs to be a verified email in SES.
@@ -228,7 +229,7 @@ def send_mail(sender, recipients, title, text, html, attachments,filename):
     base64_message = encoded_string.decode('utf-8')
     filename+=".pdf"
     attachment = [{"content":base64_message,"name":filename}]
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, html_content=html, sender=sender, subject=title,headers=headers,attachment=attachment)
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, cc=cc, html_content=html, sender=sender, subject=title,headers=headers,attachment=attachment)
 
     #return ses_client.send_raw_email(Source=sender,Destinations=recipients,RawMessage={'Data': msg.as_string()})
     try:

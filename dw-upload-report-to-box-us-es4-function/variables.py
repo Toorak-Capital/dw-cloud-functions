@@ -21,7 +21,7 @@ if env == 'prod':
     
     log_bucket_name = f"dw-{env}-cron-job-log-file-execution"
     
-    secret_name = {'box_creds' : '',
+    secret_name = {'box_creds' : 'toorak-prod-box-sm-us-ct1',
                   'looker_creds' : 'looker-creds-prod-dw-ue1-sm'}
     
     
