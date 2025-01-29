@@ -96,8 +96,10 @@ def lambda_handler(event):
     current_date = datetime.now().strftime("%Y-%m-%d")
     file_name = f"{current_date}-file-checker.log"
     event_json = event.get_json(silent=True)
-    if event_json['files'] == 'monthly_files':
-        mismatches, pretty_table = check_latest_file_date(monthly_files_bucket_folders_dest)
+    if event_json['files'] == 'monthly_files_18th':
+        mismatches, pretty_table = check_latest_file_date(monthly_files_bucket_folders_dest_18th)
+    elif event_json['files'] == 'monthly_files_2nd':
+        mismatches, pretty_table = check_latest_file_date(monthly_files_bucket_folders_dest_2nd)
     elif event_json['files'] == 'rsd_files':
         mismatches, pretty_table = check_latest_file_date(rsd_bucket_folder_pairs_dest)
     else:
