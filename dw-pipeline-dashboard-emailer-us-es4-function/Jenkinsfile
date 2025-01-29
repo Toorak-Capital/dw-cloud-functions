@@ -11,5 +11,5 @@ def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-pipeline-dashboard-emaile
                                     --service-account=dw-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
                                     --update-labels product=dw  \
                                     --update-labels environment=ENVIRONMENT_NAME \
-                                    --update-labels deployedby=cicd"]]
-dwServerless(config)
+                                    --update-labels deployedby=cicd"], githubUrl: "https://github.com/Toorak-Capital/dw-cloud-functions.git"]
+serverlessDeploy(config)
