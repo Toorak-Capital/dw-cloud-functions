@@ -45,8 +45,7 @@ def lambda_handler(request, context):
         print("Uploaded bsi-merchants successfully")
 
     elif event_type == 'OBJECT_FINALIZE' and 'BSI-Merchants/reports/' in file_path:
-        trigger_on_bsi_merchants_weekly_upload(file_path, file_uri)
-        print("Uploaded bsi_merchants_weekly successfully")
+        return trigger_on_bsi_merchants_weekly_upload(file_path, file_uri)
 
     elif event_type == 'OBJECT_FINALIZE' and 'csl/daily-extracts/' in file_path:
         trigger_on_csl_upload(file_path, file_uri)
