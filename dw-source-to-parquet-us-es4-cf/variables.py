@@ -8,6 +8,7 @@ env = os.environ.get('stage', 'dev')
 
 csv_bucket_name_destination = f'dw-{env}-raw-snapshot-us-es4-gcs'
 destination_bucket = f'dw-{env}-bronze-purchased-loan-us-es4-gcs'
+
 def read_csv(location):
     '''
     '''
