@@ -1,4 +1,4 @@
-@Library('jenkins-shared-library@test-serverless') _
+@Library('jenkins-shared-library') _
 def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-audit-report-emailer-us-es4-cf\
                                     --gen2 \
                                     --runtime=python311 \
@@ -7,7 +7,7 @@ def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-audit-report-emailer-us-e
                                    --set-env-vars stage=ENVIRONMENT_NAME \
                                     --memory=512MB \
                                     --vpc-connector=${env.vpc_connector} \
-                                    --service-account=dw-ENVIRONMENT_NAME-clou-function-sa@${env.project_id}.iam.gserviceaccount.com \
+                                    --service-account=dw-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
                                     --update-labels product=dw  \
                                     --update-labels environment=ENVIRONMENT_NAME \
                                     --update-labels deployedby=cicd"], githubUrl: "https://github.com/Toorak-Capital/dw-cloud-functions.git"]
