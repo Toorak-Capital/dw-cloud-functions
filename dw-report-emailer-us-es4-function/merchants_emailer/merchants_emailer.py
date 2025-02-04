@@ -184,6 +184,7 @@ def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['F65'] = "Purchase By State"  
     ws['F65'].font = Font(size=18, bold=True) 
     ws = wb["Sheet1"]
+    ws.freeze_panes = "B1" 
     ws['A4'] = "Purchases ($) (max balance)"
     rows_to_modify = [4, 20, 30, 40, 24, 35, 45]
     modify_excel_cells(ws, rows_to_modify)
