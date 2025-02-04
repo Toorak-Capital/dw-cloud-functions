@@ -35,9 +35,21 @@ def modify_excel_cells(ws, rows_to_modify):
                 if row in [24, 35, 45]:
                     cell.value = f"{cell.value}%"
 
-                # Format numbers with commas (skip non-numeric cases)
-            if isinstance(cell.value, (int, float)):
-                cell.value = "{:,}".format(cell.value)
+# Define USD currency format
+    usd_format = '#,##0.00'
+ 
+#     # Apply USD format to the range B8:BA16
+#     for row in ws.iter_rows(min_row=5, max_row=35, min_col=2, max_col=53):  # B=2, BA=53
+#         for cell in row:
+#             cell.number_format = usd_format
+            
+    specific_rows = [8, 9, 10, 11, 12, 13, 14, 15, 16, 34, 44]
+
+    # Apply USD format to specific rows and columns (B to BA)
+    for row in ws.iter_rows(min_row=5, max_row=50, min_col=2, max_col=53):
+        for cell in row:
+            if cell.row in specific_rows:  # Check if the current row is in the list
+                cell.number_format = usd_format
 
 def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
 
