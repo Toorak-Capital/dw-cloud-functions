@@ -35,6 +35,10 @@ def modify_excel_cells(ws, rows_to_modify):
                 if row in [24, 35, 45]:
                     cell.value = f"{cell.value}%"
 
+                # Format numbers with commas (skip non-numeric cases)
+            if isinstance(cell.value, (int, float)):
+                cell.value = "{:,}".format(cell.value)
+
 def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
 
     #first report
