@@ -151,7 +151,7 @@ def date_column_format(df,columns):
             def safe_to_datetime(date_str):
                 try:
                     
-                    return pd.to_datetime(date_str, format='%m/%d/%Y').date()
+                    return pd.to_datetime(date_str).date()
                 except pd.errors.OutOfBoundsDatetime:
                     
                     return date_str
