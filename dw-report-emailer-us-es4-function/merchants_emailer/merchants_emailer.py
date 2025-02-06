@@ -37,18 +37,23 @@ def modify_excel_cells(ws, rows_to_modify):
 
 # Define USD currency format
     usd_format = '#,##0.00'
- 
-#     # Apply USD format to the range B8:BA16
-#     for row in ws.iter_rows(min_row=5, max_row=35, min_col=2, max_col=53):  # B=2, BA=53
-#         for cell in row:
-#             cell.number_format = usd_format
-            
+             
     specific_rows = [8, 9, 10, 11, 12, 13, 14, 15, 16, 34, 44]
 
-    # Apply USD format to specific rows and columns (B to BA)
     for row in ws.iter_rows(min_row=5, max_row=50, min_col=2, max_col=53):
         for cell in row:
             if cell.row in specific_rows:  # Check if the current row is in the list
+                if isinstance(cell.value, str):  # If the value is a string
+                    # Remove any non-numeric characters (like currency symbols and commas)
+                    cell.value = ''.join(e for e in cell.value if e.isdigit() or e == '.')
+            
+                try:
+                    # Attempt to convert the value to float (this will work for strings that are numeric)
+                    cell.value = float(cell.value)
+                except ValueError:
+                    # If conversion fails (non-numeric value), leave the value as is
+                    pass
+                # Apply the USD format after conversion
                 cell.number_format = usd_format
 def auto_adjust_column_width(ws):
     """
