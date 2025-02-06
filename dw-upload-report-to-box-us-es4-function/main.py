@@ -27,6 +27,7 @@ import logging
 
 todays_date = datetime.now().strftime("%m-%d-%Y")
 wells_file_name = f'DW - Wells IPS {todays_date}.xlsx'
+wells_comparator_file_name = f'DW - Wells Comparator {todays_date}.xlsx'
 pst_file_name = f'DW - Payment Status Tracker {todays_date}.xlsx'
 
 def retriveBoxConfigFromSecret(secret):
@@ -150,7 +151,7 @@ def date_column_format(df,columns):
             def safe_to_datetime(date_str):
                 try:
                     
-                    return pd.to_datetime(date_str, format='%m/%d/%Y').date()
+                    return pd.to_datetime(date_str).date()
                 except pd.errors.OutOfBoundsDatetime:
                     
                     return date_str
@@ -168,7 +169,7 @@ def run_look_and_clean_df(sdk, look_id, col_name):
     row_limit = 7000
     response = sdk.run_look(look_id, "csv", limit = row_limit)
     df = pd.read_csv(io.StringIO(response))
-    df.columns = [col.replace('_', ' ') if col_name not in col else col.replace(f'{col_name} ','') for col in df.columns]
+    df.columns = [col.replace('_', ' ') if col_name not in col else col.replace(f'{col_name} ','').strip() for col in df.columns]
     
     
     if 'mba order' in df.columns:
@@ -219,13 +220,19 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
     upload_file_to_box(user_client, pst_buffer, pst_box_folder_id, pst_file_name)
 
 
-def wells_file_prep(sdk, user_client, wells_look_id):
+def wells_file_prep(sdk, user_client, wells_look_id, wells_comparator_look_id):
 
-    logging.info('inside wells prep')
+    logging.info('wells prep begin')
     wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
     wells_buffer = io.BytesIO()
     wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, wells_buffer, wells_box_folder_id, wells_file_name)
+
+    logging.info('wells comparator begin')
+    wells_comparator = run_look_and_clean_df(sdk, wells_comparator_look_id,'Wells Comparision')
+    wells_comparator_buffer = io.BytesIO()
+    wells_comparator.to_excel(wells_comparator_buffer, index=False, engine='openpyxl')
+    upload_file_to_box(user_client, wells_comparator_buffer, wells_box_folder_id, wells_comparator_file_name)
     
 
 def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
@@ -253,4 +260,4 @@ def box_looker_conn():
     sdk = looker_sdk.init40()
 
     pst_file_prep(sdk, user_client, look_id['pst'])
-    wells_file_prep(sdk, user_client, look_id['wells_ips'])
+    wells_file_prep(sdk, user_client, look_id['wells_ips'], look_id['wells_comparator'])

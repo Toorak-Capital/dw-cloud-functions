@@ -27,8 +27,8 @@ def modify_uk_excel_cells(ws, rows_to_modify):
             cell = ws.cell(row=row, column=col)
             
             if isinstance(cell.value, str):  # Ensure the cell contains a string
-                if row in [4, 5, 6, 7, 13, 14]:
-                    cell.value = f"£{cell.value}"
+                # if row in [4, 5, 6, 7, 13, 14]:   removing Pound sign on 6th Feb 2024
+                #     cell.value = f"£{cell.value}"
                     
                 if row in [47, 48, 49, 50]:
                     try:
@@ -42,7 +42,61 @@ def modify_uk_excel_cells(ws, rows_to_modify):
                 if row in [31,41]:
                     cell.value = f"{cell.value}%"
 
+        pound_format = '#,##0.00'
 
+        specific_rows = [4, 5, 6, 7, 13, 14, 21, 23, 24, 37, 38, 39, 40]
+
+# Apply Pound format and convert values to float to specific rows and columns (B to BA)
+    for row in ws.iter_rows(min_row=5, max_row=50, min_col=2, max_col=53):
+        for cell in row:
+            if cell.row in specific_rows:  # Check if the current row is in the list
+                if isinstance(cell.value, str):  # If the value is a string
+                    # Remove any non-numeric characters (like currency symbols and commas)
+                    cell.value = ''.join(e for e in cell.value if e.isdigit() or e == '.')
+            
+                try:
+                    # Attempt to convert the value to float (this will work for strings that are numeric)
+                    cell.value = float(cell.value)
+                except ValueError:
+                    # If conversion fails (non-numeric value), leave the value as is
+                    pass
+                
+                # Apply the pound format after conversion
+                cell.number_format = pound_format
+                
+            if cell.row in [22, 25]:
+                if isinstance(cell.value, str):  # If the value is a string
+                    try:
+                        # Convert the string to an integer if possible
+                        cell.value = int(cell.value)
+                    except ValueError:
+                        # If conversion fails, leave the value as is
+                        pass
+
+def auto_adjust_column_width(ws):
+    """
+    Adjusts the width of all columns, setting a fixed width for the first column
+    and adjusting the rest based on the data they contain.
+    """
+    # Set a fixed width for Column A (adjust the value as needed)
+    ws.column_dimensions['A'].width = 40  # You can change 40 to any fixed width you prefer
+
+    for col in ws.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+
+        # Skip Column A since its width is already fixed
+        if col_letter == 'A':
+            continue
+
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        
+        ws.column_dimensions[col_letter].width = max_length + 2
 
 def uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
 
@@ -146,19 +200,28 @@ def uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['F95'] = "Payoffs Volume" 
     ws['F126'].font = Font(size=18, bold=True) 
     ws = wb["Sheet1"]
+    ws.freeze_panes = "B3"
     ws['F126'] = "NetWAC (Toorak Yield)" 
-    ws['A2'] = "Purchases"
-    ws['A11'] = "Draws & Payoffs"
-    ws['A19'] = "Totals"
-    ws['A29'] = "Net WAC (Toorak Yield)"
-    ws['A35'] = "4 Week Rolling"
-    ws['A45'] = "Rolling 4 4 Week Delta"
+    ws['A2'] = "Week Number"
+    ws['A3'] = "Purchases"
+    ws['A11'] = "Week Number"
+    ws['A12'] = "Draws & Payoffs"
+    ws['A19'] = "Week Number"
+    ws['A20'] = "Totals"
+    ws['A29'] = "Week Number"
+    ws['A30'] = "Net WAC (Toorak Yield)"
+    ws['A35'] = "Week Number"
+    ws['A36'] = "4 Week Rolling"
+    ws['A45'] = "Week Number"
+    ws['A46'] = "Rolling 4 4 Week Delta"
 
-    rows_to_modify = [31, 41, 47, 48, 49, 50, 4, 5, 6, 7, 13, 14]
+    rows_to_modify = [31, 41, 47, 48, 49, 50] # Since Pound sign has been removed no need to add row 4,5,6,7,13,14 to this list
+    #  [4, 5, 6, 7, 13, 14]
     modify_uk_excel_cells(ws, rows_to_modify)
+    # Auto adjust column widths after modifying the cells
+    auto_adjust_column_width(ws)
 
     wb.save(ws_name)
-
 
     with open(file_path, 'rb') as f:
         txt=f.read()
