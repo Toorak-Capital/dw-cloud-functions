@@ -37,19 +37,48 @@ def modify_excel_cells(ws, rows_to_modify):
 
 # Define USD currency format
     usd_format = '#,##0.00'
- 
-#     # Apply USD format to the range B8:BA16
-#     for row in ws.iter_rows(min_row=5, max_row=35, min_col=2, max_col=53):  # B=2, BA=53
-#         for cell in row:
-#             cell.number_format = usd_format
-            
+             
     specific_rows = [8, 9, 10, 11, 12, 13, 14, 15, 16, 34, 44]
 
-    # Apply USD format to specific rows and columns (B to BA)
     for row in ws.iter_rows(min_row=5, max_row=50, min_col=2, max_col=53):
         for cell in row:
             if cell.row in specific_rows:  # Check if the current row is in the list
+                if isinstance(cell.value, str):  # If the value is a string
+                    # Remove any non-numeric characters (like currency symbols and commas)
+                    cell.value = ''.join(e for e in cell.value if e.isdigit() or e == '.')
+            
+                try:
+                    # Attempt to convert the value to float (this will work for strings that are numeric)
+                    cell.value = float(cell.value)
+                except ValueError:
+                    # If conversion fails (non-numeric value), leave the value as is
+                    pass
+                # Apply the USD format after conversion
                 cell.number_format = usd_format
+def auto_adjust_column_width(ws):
+    """
+    Adjusts the width of all columns, setting a fixed width for the first column
+    and adjusting the rest based on the data they contain.
+    """
+    # Set a fixed width for Column A (adjust the value as needed)
+    ws.column_dimensions['A'].width = 80  # You can change 80 to any fixed width you prefer
+
+    for col in ws.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+
+        # Skip Column A since its width is already fixed
+        if col_letter == 'A':
+            continue
+
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        
+        ws.column_dimensions[col_letter].width = max_length + 2
 
 def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
 
@@ -184,10 +213,12 @@ def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['F65'] = "Purchase By State"  
     ws['F65'].font = Font(size=18, bold=True) 
     ws = wb["Sheet1"]
-    ws.freeze_panes = "B1" 
+    ws.freeze_panes = "B8" 
     ws['A4'] = "Purchases ($) (max balance)"
     rows_to_modify = [4, 20, 30, 40, 24, 35, 45]
     modify_excel_cells(ws, rows_to_modify)
+    # Auto adjust column widths after modifying the cells
+    auto_adjust_column_width(ws)
     wb.save(ws_name)
 
     with open(file_path, 'rb') as f:
