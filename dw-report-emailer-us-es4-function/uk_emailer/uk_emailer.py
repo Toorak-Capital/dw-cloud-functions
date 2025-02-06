@@ -146,6 +146,7 @@ def uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['F95'] = "Payoffs Volume" 
     ws['F126'].font = Font(size=18, bold=True) 
     ws = wb["Sheet1"]
+    ws.freeze_panes = "B3"
     ws['F126'] = "NetWAC (Toorak Yield)" 
     ws['A2'] = "Week Number"
     ws['A3'] = "Purchases"
