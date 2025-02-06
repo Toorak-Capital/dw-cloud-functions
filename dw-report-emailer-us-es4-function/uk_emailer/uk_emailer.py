@@ -147,12 +147,18 @@ def uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['F126'].font = Font(size=18, bold=True) 
     ws = wb["Sheet1"]
     ws['F126'] = "NetWAC (Toorak Yield)" 
-    ws['A2'] = "Purchases"
-    ws['A11'] = "Draws & Payoffs"
-    ws['A19'] = "Totals"
-    ws['A29'] = "Net WAC (Toorak Yield)"
-    ws['A35'] = "4 Week Rolling"
-    ws['A45'] = "Rolling 4 4 Week Delta"
+    ws['A2'] = "Week Number"
+    ws['A3'] = "Purchases"
+    ws['A11'] = "Week Number"
+    ws['A12'] = "Draws & Payoffs"
+    ws['A19'] = "Week Number"
+    ws['A20'] = "Totals"
+    ws['A29'] = "Week Number"
+    ws['A30'] = "Net WAC (Toorak Yield)"
+    ws['A35'] = "Week Number"
+    ws['A36'] = "4 Week Rolling"
+    ws['A45'] = "Week Number"
+    ws['A46'] = "Rolling 4 4 Week Delta"
 
     rows_to_modify = [31, 41, 47, 48, 49, 50, 4, 5, 6, 7, 13, 14]
     modify_uk_excel_cells(ws, rows_to_modify)
