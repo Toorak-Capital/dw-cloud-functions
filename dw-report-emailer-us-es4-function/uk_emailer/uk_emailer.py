@@ -27,8 +27,8 @@ def modify_uk_excel_cells(ws, rows_to_modify):
             cell = ws.cell(row=row, column=col)
             
             if isinstance(cell.value, str):  # Ensure the cell contains a string
-                if row in [4, 5, 6, 7, 13, 14]:
-                    cell.value = f"£{cell.value}"
+                # if row in [4, 5, 6, 7, 13, 14]:   removing Pound sign on 6th Feb 2024
+                #     cell.value = f"£{cell.value}"
                     
                 if row in [47, 48, 49, 50]:
                     try:
