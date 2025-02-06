@@ -50,6 +50,30 @@ def modify_excel_cells(ws, rows_to_modify):
         for cell in row:
             if cell.row in specific_rows:  # Check if the current row is in the list
                 cell.number_format = usd_format
+def auto_adjust_column_width(ws):
+    """
+    Adjusts the width of all columns, setting a fixed width for the first column
+    and adjusting the rest based on the data they contain.
+    """
+    # Set a fixed width for Column A (adjust the value as needed)
+    ws.column_dimensions['A'].width = 30  # You can change 30 to any fixed width you prefer
+
+    for col in ws.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+
+        # Skip Column A since its width is already fixed
+        if col_letter == 'A':
+            continue
+
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        
+        ws.column_dimensions[col_letter].width = max_length + 2
 
 def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
 
@@ -188,6 +212,8 @@ def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['A4'] = "Purchases ($) (max balance)"
     rows_to_modify = [4, 20, 30, 40, 24, 35, 45]
     modify_excel_cells(ws, rows_to_modify)
+    # Auto adjust column widths after modifying the cells
+    auto_adjust_column_width(ws)
     wb.save(ws_name)
 
     with open(file_path, 'rb') as f:
