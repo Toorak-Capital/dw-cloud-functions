@@ -199,20 +199,32 @@ def uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['F95'].font = Font(size=18, bold=True) 
     ws['F95'] = "Payoffs Volume" 
     ws['F126'].font = Font(size=18, bold=True) 
+    ws['F126'] = "NetWAC (Toorak Yield)" 
     ws = wb["Sheet1"]
     ws.freeze_panes = "B3"
-    ws['F126'] = "NetWAC (Toorak Yield)" 
     ws['A2'] = "Week Number"
+    ws['A3'].font = Font(size=11, bold=True) 
+    ws['A3'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A3'] = "Purchases"
     ws['A11'] = "Week Number"
+    ws['A12'].font = Font(size=11, bold=True) 
+    ws['A12'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A12'] = "Draws & Payoffs"
     ws['A19'] = "Week Number"
+    ws['A20'].font = Font(size=11, bold=True) 
+    ws['A20'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A20'] = "Totals"
     ws['A29'] = "Week Number"
+    ws['A30'].font = Font(size=11, bold=True) 
+    ws['A30'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A30'] = "Net WAC (Toorak Yield)"
     ws['A35'] = "Week Number"
+    ws['A36'].font = Font(size=11, bold=True) 
+    ws['A36'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A36'] = "4 Week Rolling"
     ws['A45'] = "Week Number"
+    ws['A46'].font = Font(size=11, bold=True) 
+    ws['A46'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A46'] = "Rolling 4 4 Week Delta"
 
     rows_to_modify = [31, 41, 47, 48, 49, 50] # Since Pound sign has been removed no need to add row 4,5,6,7,13,14 to this list
