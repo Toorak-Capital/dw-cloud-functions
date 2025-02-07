@@ -12,6 +12,7 @@ from google.cloud import storage
 import json
 from openpyxl.styles import Font
 import jinja2
+import re
 from uk_emailer.variables import *
 
 def modify_uk_excel_cells(ws, rows_to_modify):
@@ -52,13 +53,15 @@ def modify_uk_excel_cells(ws, rows_to_modify):
             if cell.row in specific_rows:  # Check if the current row is in the list
                 if isinstance(cell.value, str):  # If the value is a string
                     # Remove any non-numeric characters (like currency symbols and commas)
-                    cell.value = ''.join(e for e in cell.value if e.isdigit() or e == '.')
+                    cell.value = re.sub(r"[^\d.]", "", cell.value.strip())
             
                 try:
-                    # Attempt to convert the value to float (this will work for strings that are numeric)
-                    cell.value = float(cell.value)
+                    # Attempt to convert cleaned value to float
+                    numeric_value = float(cell.value)
+                    cell.value = None  # Clear cell to reset formatting in Excel
+                    cell.value = numeric_value  # Assign as numeric value
+                    cell.number_format = pound_format
                 except ValueError:
-                    # If conversion fails (non-numeric value), leave the value as is
                     pass
                 
                 # Apply the pound format after conversion
