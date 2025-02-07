@@ -67,9 +67,6 @@ def modify_uk_excel_cells(ws, rows_to_modify):
                 except ValueError:
                     pass
                 
-                # Apply the pound format after conversion
-                cell.number_format = pound_format
-                
             if cell.row in [22, 25]:
                 if isinstance(cell.value, str):  # If the value is a string
                     try:
