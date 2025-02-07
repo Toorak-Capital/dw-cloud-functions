@@ -7,7 +7,6 @@ import pandas as pd
 import numpy as np
 import openpyxl
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Alignment
 from google.cloud import storage
 import json
 from openpyxl.styles import Font
