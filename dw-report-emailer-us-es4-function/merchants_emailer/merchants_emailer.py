@@ -22,6 +22,7 @@ def modify_excel_cells(ws, rows_to_modify):
     ws (Worksheet): The worksheet to modify.
     rows_to_modify (list): List of row numbers to modify.
     """
+    right_alignment = Alignment(horizontal='right')
     for row in rows_to_modify:
         for col in range(2, 54):  # B is column 2 and BA is column 53
             cell = ws.cell(row=row, column=col)
@@ -34,6 +35,7 @@ def modify_excel_cells(ws, rows_to_modify):
                 # For row 24: Append percentage sign
                 if row in [24, 35, 45]:
                     cell.value = f"{cell.value}%"
+                    cell.alignment = right_alignment  #alignment to the left
 
 # Define USD currency format
     usd_format = '#,##0.00'
