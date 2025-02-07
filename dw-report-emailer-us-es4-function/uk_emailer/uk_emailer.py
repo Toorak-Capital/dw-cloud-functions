@@ -7,10 +7,10 @@ import pandas as pd
 import numpy as np
 import openpyxl
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Alignment
 from google.cloud import storage
 import json
 from openpyxl.styles import Font
+from openpyxl.styles import Alignment
 import jinja2
 import re
 from uk_emailer.variables import *
@@ -23,6 +23,7 @@ def modify_uk_excel_cells(ws, rows_to_modify):
     ws (Worksheet): The worksheet to modify.
     rows_to_modify (list): List of row numbers to modify.
     """
+    right_alignment = Alignment(horizontal='right')
     for row in rows_to_modify:
         for col in range(2, 54):  # B is column 2 and BA is column 53
             cell = ws.cell(row=row, column=col)
@@ -36,12 +37,14 @@ def modify_uk_excel_cells(ws, rows_to_modify):
                         numeric_value = float(cell.value)  # Convert to float
                         formatted_value = int(numeric_value * 100) # Multiply by 100 and round to 2 decimal places
                         cell.value = f"{formatted_value}%"  # Append '%'
+                        cell.alignment = right_alignment  #alignment to the left
                     except ValueError:
                         pass  # If conversion fails, keep original value
                 
                 # For row 24: Append percentage sign
                 if row in [31,41]:
                     cell.value = f"{cell.value}%"
+                    cell.alignment = right_alignment
 
         pound_format = '#,##0.00'
 
