@@ -46,7 +46,7 @@ def modify_uk_excel_cells(ws, rows_to_modify):
                     cell.value = f"{cell.value}%"
                     cell.alignment = right_alignment
 
-        pound_format = '#,##0.00'
+        pound_format = '£#,##0.00'
 
         specific_rows = [4, 5, 6, 7, 13, 14, 21, 23, 24, 37, 38, 39, 40]
 
