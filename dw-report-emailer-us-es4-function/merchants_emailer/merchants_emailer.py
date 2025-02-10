@@ -35,7 +35,11 @@ def modify_excel_cells(ws, rows_to_modify):
                 # For row 24: Append percentage sign
                 if row in [24, 35, 45]:
                     cell.value = f"{cell.value}%"
-                    cell.alignment = right_alignment  #alignment to the left
+                    cell.alignment = right_alignment  #alignment to the right
+
+             # Explicitly align all cells in row 36 to the right
+            if row == 36:
+                cell.alignment = right_alignment
 
 # Define USD currency format
     usd_format = '#,##0.00'
@@ -63,7 +67,7 @@ def auto_adjust_column_width(ws):
     and adjusting the rest based on the data they contain.
     """
     # Set a fixed width for Column A (adjust the value as needed)
-    ws.column_dimensions['A'].width = 80  # You can change 80 to any fixed width you prefer
+    ws.column_dimensions['A'].width = 40  # You can change 40 to any fixed width you prefer
 
     for col in ws.columns:
         max_length = 0
