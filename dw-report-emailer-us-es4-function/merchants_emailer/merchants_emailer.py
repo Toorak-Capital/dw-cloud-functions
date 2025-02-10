@@ -240,7 +240,7 @@ def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
         for cell in ws[row_number]:
             cell.alignment = Alignment(horizontal='center', vertical='left')
 
-    rows_to_modify = [4, 20, 30, 40, 24, 35,36, 45]
+    rows_to_modify = [4, 20, 30, 40, 24, 35, 36, 45]
     modify_excel_cells(ws, rows_to_modify)
     # Auto adjust column widths after modifying the cells
     auto_adjust_column_width(ws)
