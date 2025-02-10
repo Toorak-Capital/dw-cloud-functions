@@ -230,7 +230,16 @@ def uk_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws['A46'].alignment = Alignment(horizontal='center', vertical='center')
     ws['A46'] = "Rolling 4 4 Week Delta"
 
-    rows_to_modify = [31, 41, 47, 48, 49, 50] # Since Pound sign has been removed no need to add row 4,5,6,7,13,14 to this list
+    for cell in ws['A']:  # Apply center alignment to A column
+        cell.alignment = Alignment(horizontal='center', vertical='center')
+
+    
+    target_rows = [3, 12, 20, 30, 36, 46]  # Apply center alignment to all specified rows
+    for row_number in target_rows:
+        for cell in ws[row_number]:
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+
+    rows_to_modify = [31, 41, 47, 48, 49, 50] # Since code changed  has been made no need to add row 4,5,6,7,13,14 to this list
     #  [4, 5, 6, 7, 13, 14]
     modify_uk_excel_cells(ws, rows_to_modify)
     # Auto adjust column widths after modifying the cells
