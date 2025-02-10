@@ -76,7 +76,7 @@ def auto_adjust_column_width(ws):
     and adjusting the rest based on the data they contain.
     """
     # Set a fixed width for Column A (adjust the value as needed)
-    ws.column_dimensions['A'].width = 40  # You can change 40 to any fixed width you prefer
+    ws.column_dimensions['A'].width = 25  # You can change 25 to any fixed width you prefer
 
     for col in ws.columns:
         max_length = 0
