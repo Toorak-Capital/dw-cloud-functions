@@ -51,7 +51,7 @@ def modify_uk_excel_cells(ws, rows_to_modify):
         specific_rows = [4, 5, 6, 7, 13, 14, 21, 23, 24, 37, 38, 39, 40]
 
 # Apply Pound format and convert values to float to specific rows and columns (B to BA)
-    for row in ws.iter_rows(min_row=5, max_row=50, min_col=2, max_col=53):
+    for row in ws.iter_rows(min_row=4, max_row=50, min_col=2, max_col=53):
         for cell in row:
             if cell.row in specific_rows:  # Check if the current row is in the list
                 if isinstance(cell.value, (str, float, int)):  # If the value is a string
