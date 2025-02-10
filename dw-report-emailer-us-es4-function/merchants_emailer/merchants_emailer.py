@@ -47,7 +47,7 @@ def modify_excel_cells(ws, rows_to_modify):
                     clean_value = float(str(cell.value).replace(",", "").strip())
                     cell.value = clean_value
                     cell.alignment = right_alignment
-                except (ValueError, TypeError):
+                except ValueError:
                     pass
 
 # Define USD currency format
