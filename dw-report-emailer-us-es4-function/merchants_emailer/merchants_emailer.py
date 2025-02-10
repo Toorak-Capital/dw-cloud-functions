@@ -35,7 +35,11 @@ def modify_excel_cells(ws, rows_to_modify):
                 # For row 24: Append percentage sign
                 if row in [24, 35, 45]:
                     cell.value = f"{cell.value}%"
-                    cell.alignment = right_alignment  #alignment to the left
+                    cell.alignment = right_alignment  #alignment to the right
+
+             # Explicitly align all cells in row 36 to the right
+            if row == 36:
+                cell.alignment = right_alignment
 
 # Define USD currency format
     usd_format = '#,##0.00'
