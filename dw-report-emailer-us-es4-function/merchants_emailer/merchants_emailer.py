@@ -231,11 +231,11 @@ def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws.freeze_panes = "B8" 
     ws['A4'] = "Purchases ($) (max balance)"
 
-    for cell in ws['A']:  # Apply center alignment to A column
+    for cell in ws['A']:  # Apply left alignment to A column
         cell.alignment = Alignment(horizontal='left')
 
     
-    target_rows = [5, 6, 7, 21, 22, 23, 31, 32, 33, 41, 42, 43]  # Apply center alignment to all specified rows
+    target_rows = [5, 6, 7, 21, 22, 23, 31, 32, 33, 41, 42, 43]  # Apply left alignment to all specified rows
     for row_number in target_rows:
         for cell in ws[row_number]:
             cell.alignment = Alignment(horizontal='left')
