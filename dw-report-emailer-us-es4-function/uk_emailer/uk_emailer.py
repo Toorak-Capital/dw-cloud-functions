@@ -46,7 +46,7 @@ def modify_uk_excel_cells(ws, rows_to_modify):
                     cell.value = f"{cell.value}%"
                     cell.alignment = right_alignment
 
-        pound_format = '#,##0.00'
+        pound_format = '£#,##0.00'
 
         specific_rows = [4, 5, 6, 7, 13, 14, 21, 23, 24, 37, 38, 39, 40]
 
@@ -54,9 +54,9 @@ def modify_uk_excel_cells(ws, rows_to_modify):
     for row in ws.iter_rows(min_row=5, max_row=50, min_col=2, max_col=53):
         for cell in row:
             if cell.row in specific_rows:  # Check if the current row is in the list
-                if isinstance(cell.value, str):  # If the value is a string
+                if isinstance(cell.value, (str, float, int)):  # If the value is a string
                     # Remove any non-numeric characters (like currency symbols and commas)
-                    cell.value = re.sub(r"[^\d.]", "", cell.value.strip())
+                    cell.value = re.sub(r"[^\d.]", "", str(cell.value).strip())
             
                 try:
                     # Attempt to convert cleaned value to float
@@ -64,7 +64,7 @@ def modify_uk_excel_cells(ws, rows_to_modify):
                     cell.value = None  # Clear cell to reset formatting in Excel
                     cell.value = numeric_value  # Assign as numeric value
                     cell.number_format = pound_format
-                except ValueError:
+                except (ValueError, TypeError):
                     pass
                 
             if cell.row in [22, 25]:
