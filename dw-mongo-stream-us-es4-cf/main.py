@@ -48,19 +48,19 @@ def get_documents(collection, data_from=None):
                 {"updatedOn": {"$gte": data_from}}
             ]
         }
-        logging.info('Query From: %', data_from)
+        logging.info('Query From: %s', data_from)
         documents = list(collection.find(query))
     else:
         # Query all documents
         documents = list(collection.find())
 
-    logging.info('No of documents: %', len(documents))
+    logging.info('No of documents: %s', len(documents))
     
     # Flatten nested JSON
     df = pd.json_normalize(documents)
     df = df.astype(str)
 
-    logging.info('DTypes: %', df.dtypes)
+    logging.info('DTypes: %s', df.dtypes)
     return df
 
 
