@@ -157,7 +157,10 @@ def trigger_on_repo_file_upload(cloudevent, context):
         warehouseline = 'jpm'
     elif 'bawag' in file_name:
         warehouseline = 'bawag'
-        sheet_name = 'Bawag NPL Payoff Loan Details'
+        if 'performing' in file_name:
+            sheet_name = 'Bawag Perf Payoff Loan Details'
+        elif 'npl' in file_name:
+            sheet_name = 'Bawag NPL Payoff Loan Details'
     elif 'churchill' in file_name:
         warehouseline = 'churchill'
         sheet_name = 'Churchill Payoff Loan Details'

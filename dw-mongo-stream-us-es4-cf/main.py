@@ -48,19 +48,19 @@ def get_documents(collection, data_from=None):
                 {"updatedOn": {"$gte": data_from}}
             ]
         }
-        logging.info('Query From: %', data_from)
+        logging.info('Query From: %s', data_from)
         documents = list(collection.find(query))
     else:
         # Query all documents
         documents = list(collection.find())
 
-    logging.info('No of documents: %', len(documents))
+    logging.info('No of documents: %s', len(documents))
     
     # Flatten nested JSON
     df = pd.json_normalize(documents)
     df = df.astype(str)
 
-    logging.info('DTypes: %', df.dtypes)
+    logging.info('DTypes: %s', df.dtypes)
     return df
 
 
@@ -80,15 +80,16 @@ def get_query_date():
     # Extract folder names
     available_folders = {blob.name.rstrip("/") for blob in blobs}
     sorted_folders = sorted(available_folders, reverse=True)
-    last_folder = sorted_folders[0].split('/')[1] if sorted_folders else None
+    last_folder = sorted_folders[0].split('/')[1] if 'ingested_date' in sorted_folders else None
 
     data_from = None
     if last_folder == yesterday_folder:
         data_from = datetime.strptime(yesterday_folder, 'ingested_date=%Y-%m-%d')
     elif last_folder:
         data_from = datetime.strptime(last_folder, 'ingested_date=%Y-%m-%d') + timedelta(days=1)
-
-    return data_from
+        
+    formatted_date = (data_from if data_from else yesterday).strftime("%Y-%m-%d")
+    return data_from, formatted_date
 
 
 def write_parquet_file(df, formatted_date):
@@ -105,12 +106,11 @@ def write_parquet_file(df, formatted_date):
 def mongo_stream(request):
     """
     """
-    data_from = get_query_date()
+    data_from, formatted_date = get_query_date()
     client = get_mongo_client()
     collection = get_counsel_collection(client, counsel_db, counsel_collection)
     df = get_documents(collection, data_from=data_from)
 
-    formatted_date = data_from.strftime("%Y-%m-%d")
     write_parquet_file(df, formatted_date)
     
     return {
