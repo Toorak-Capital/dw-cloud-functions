@@ -18,6 +18,13 @@ import jinja2
 
 file_path = '/tmp/output.xlsx'
 
+def apply_left_alignment(sheet):
+    """Apply left alignment to all cells in the given sheet."""
+    left_alignment = Alignment(horizontal='left')
+    for row in sheet.iter_rows(min_row=1, max_row=sheet.max_row, min_col=1, max_col=sheet.max_column):
+        for cell in row:
+            cell.alignment = left_alignment
+
 def auto_adjust_columns(sheet):
     """
     Automatically adjust column width based on content.
@@ -87,7 +94,9 @@ def table_funding_report(file_name, sdk, email_api, bucket, get_bucket):
     auto_adjust_columns(sheet1)
     auto_adjust_columns(sheet2)
 
-    # Apply currency formatting
+    # Apply formatting and alignment
+    apply_left_alignment(sheet1)
+    apply_left_alignment(sheet2)
     apply_currency_format(sheet1, ["M", "N"])  # Loan Information sheet: Columns M, N
     apply_currency_format(sheet2, ["B", "C"]) 
 
