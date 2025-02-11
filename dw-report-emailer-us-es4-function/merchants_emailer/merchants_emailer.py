@@ -76,7 +76,7 @@ def auto_adjust_column_width(ws):
     and adjusting the rest based on the data they contain.
     """
     # Set a fixed width for Column A (adjust the value as needed)
-    ws.column_dimensions['A'].width = 40  # You can change 40 to any fixed width you prefer
+    ws.column_dimensions['A'].width = 25  # You can change 25 to any fixed width you prefer
 
     for col in ws.columns:
         max_length = 0
@@ -231,14 +231,14 @@ def merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket):
     ws.freeze_panes = "B8" 
     ws['A4'] = "Purchases ($) (max balance)"
 
-    for cell in ws['A']:  # Apply center alignment to A column
-        cell.alignment = Alignment(vertical='left')
+    for cell in ws['A']:  # Apply left alignment to A column
+        cell.alignment = Alignment(horizontal='left')
 
     
-    target_rows = [5, 6, 7, 21, 22, 23, 31, 32, 33, 41, 42, 43]  # Apply center alignment to all specified rows
+    target_rows = [5, 6, 7, 21, 22, 23, 31, 32, 33, 41, 42, 43]  # Apply left alignment to all specified rows
     for row_number in target_rows:
         for cell in ws[row_number]:
-            cell.alignment = Alignment(vertical='left')
+            cell.alignment = Alignment(horizontal='left')
 
     rows_to_modify = [4, 20, 30, 40, 24, 35, 36, 45]
     modify_excel_cells(ws, rows_to_modify)
