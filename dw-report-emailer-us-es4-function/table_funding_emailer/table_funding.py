@@ -2,6 +2,7 @@ from table_funding_emailer.variables import *
 from variables import *
 from send_email import *
 import io
+import re
 from PIL import Image
 import os
 import pandas as pd
@@ -9,12 +10,53 @@ import numpy as np
 import openpyxl
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Alignment
+from openpyxl.styles import numbers
 from google.cloud import storage
 import json
 from openpyxl.styles import Font
 import jinja2
 
 file_path = '/tmp/output.xlsx'
+
+def auto_adjust_columns(sheet):
+    """
+    Automatically adjust column width based on content.
+    """
+    for col in sheet.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        adjusted_width = max_length + 2
+        sheet.column_dimensions[col_letter].width = adjusted_width
+
+
+def apply_currency_format(sheet, columns):
+    """
+    Apply currency formatting to specified columns in a worksheet.
+    """
+    dollar_format = numbers.FORMAT_CURRENCY_USD_SIMPLE  # "$#,##0.00"
+    
+    for col_letter in columns:
+        for row in range(2, sheet.max_row + 1):  # Skip header row
+            cell = sheet[f"{col_letter}{row}"]
+            value = str(cell.value).strip() if cell.value is not None else None
+            
+            if value:
+                # Remove any currency symbols, commas, or whitespace
+                cleaned_value = re.sub(r"[^\d.-]", "", value)
+                try:
+                    # Convert to float and apply formatting
+                    numeric_value = float(cleaned_value)
+                    cell.value = numeric_value
+                    cell.number_format = dollar_format
+                except ValueError:
+                    # Skip non-convertible values
+                    pass
 
 def table_funding_report(file_name, sdk, email_api, bucket, get_bucket):
 
@@ -35,7 +77,23 @@ def table_funding_report(file_name, sdk, email_api, bucket, get_bucket):
     with pd.ExcelWriter(file_path) as writer1:
         loan_info.to_excel(writer1, sheet_name="Loan_Information", startrow=0, startcol=0, index=False)
         summary.to_excel(writer1, sheet_name="Summary", startrow=0, startcol=0, index=False)
-            
+
+    # Load workbook and apply formatting
+    wb = openpyxl.load_workbook(file_path)
+    sheet1 = wb["Loan_Information"]
+    sheet2 = wb["Summary"]
+
+    # Auto-adjust column widths
+    auto_adjust_columns(sheet1)
+    auto_adjust_columns(sheet2)
+
+    # Apply currency formatting
+    apply_currency_format(sheet1, ["M", "N"])  # Loan Information sheet: Columns M, N
+    apply_currency_format(sheet2, ["B", "C"]) 
+
+    # Save workbook
+    wb.save(file_path)
+
     with open(file_path, 'rb') as f:
         txt=f.read()
         blob = bucket.blob(f'looker_report_emails/{file_name}.xlsx')
