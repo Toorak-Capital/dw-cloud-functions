@@ -1,0 +1,17 @@
+@Library('jenkins-shared-library') _
+def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-mongo-stream-us-es4-cf \
+                                    --gen2 \
+                                    --runtime=python312 \
+                                    --region=us-east4 --source=dw-mongo-stream-us-es4-cf\
+                                    --entry-point=mongo_stream \
+                                    --set-env-vars stage=ENVIRONMENT_NAME,project_id=${env.project_id} \
+                                    --memory=1024MB \
+                                    --timeout=360 \
+                                    --trigger-http \
+                                    --set-secrets Mongo_Secret=dw-ENVIRONMENT_NAME-mongo-creds-us-es4-sm:latest \
+                                    --service-account=dw-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
+                                    --vpc-connector=${env.vpc_connector} --egress-settings=private-ranges-only \
+                                    --update-labels product=dw  \
+                                    --update-labels environment=ENVIRONMENT_NAME \
+                                    --update-labels deployedby=cicd"], githubUrl: "https://github.com/Toorak-Capital/dw-cloud-functions.git"]
+serverlessDeploy(config)
