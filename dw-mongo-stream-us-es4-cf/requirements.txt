@@ -1,0 +1,6 @@
+functions-framework==3.*
+google-cloud-secret-manager
+google-cloud-storage
+pymongo==4.11
+google-cloud-logging
+pandas==2.2.2
