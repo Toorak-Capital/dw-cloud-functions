@@ -25,7 +25,8 @@ def pst_emailer(file_name, sdk, email_api, bucket, get_bucket):
         <br>
         Please find below the link to report name.<br>Please let us know if you face any issues.<br>
         <ul>
-            <li><a href="https://toorakcapital.cloud.looker.com/dashboards/346">Looker Report</a></li>
+            <li><a href="https://toorakcapital.cloud.looker.com/dashboards/346">PST Looker Report</a></li>
+            <li><a href="https://toorakcapital.cloud.looker.com/dashboards/491">PST Comparator Looker Report</a></li>
             <li><a href="https://toorakcapital.box.com/s/szb970nur4nnrjwkstt021kwf7pvk13b">Box Folder</a></li>
         </ul>
         
