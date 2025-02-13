@@ -12,3 +12,5 @@ boxsdk
 boxsdk[jwt]
 google-cloud-bigquery
 google-cloud-logging
+jinja2
+Pillow==10.1.0
