@@ -260,7 +260,7 @@ def opr_file_prep(sdk, user_client, opr_look_ids):
     maturity_date = run_look_and_clean_df(sdk, look_id['OPR']['maturity_date'], 'Payment Status Tracker')
     loan_level_opr = run_look_and_clean_df(sdk, look_id['OPR']['loan_level_opr'], 'Payment Status Tracker')
 
-    with pd.ExcelWriter(file_path, engine = 'openpyxl') as writer:
+    with pd.ExcelWriter(tmp_file_path, engine = 'openpyxl') as writer:
 
         delinquency.to_excel(writer, sheet_name = 'Summary', index=False, startrow= 3)
         maturity_date.to_excel(writer, sheet_name = 'Summary', index=False, startcol= 7, startrow= 3)
