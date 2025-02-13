@@ -20,6 +20,7 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment
 # Imports the Cloud Logging client library
 import google.cloud.logging
+from PIL import Image
 # Instantiates a client
 client = google.cloud.logging.Client()
 client.setup_logging()
@@ -28,7 +29,9 @@ import logging
 todays_date = datetime.now().strftime("%m-%d-%Y")
 wells_file_name = f'DW - Wells IPS {todays_date}.xlsx'
 wells_comparator_file_name = f'DW - Wells Comparator {todays_date}.xlsx'
+pst_comparator_file_name = f'DW - PST Comparator {todays_date}.xlsx'
 pst_file_name = f'DW - Payment Status Tracker {todays_date}.xlsx'
+opr_file_name = f'DW - Originator Performance Report {todays_date}.xlsx'
 
 def retriveBoxConfigFromSecret(secret):
 
@@ -181,7 +184,13 @@ def run_look_and_clean_df(sdk, look_id, col_name):
     
     return df
 
-def pst_file_prep(sdk, user_client, pst_look_ids):
+def run_look_and_save_png(sdk, look_id, file_path):
+     
+    response = sdk.run_look(look_id, "png")
+    image = Image.open(io.BytesIO(response))
+    image.save(file_path)
+
+def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id):
 
 
     logging.info('inside pst prep')
@@ -219,6 +228,11 @@ def pst_file_prep(sdk, user_client, pst_look_ids):
     wb.save(pst_buffer)
     upload_file_to_box(user_client, pst_buffer, pst_box_folder_id, pst_file_name)
 
+    logging.info('pst comparator begin')
+    pst_comparator = run_look_and_clean_df(sdk, pst_comparator_look_id,'Pst Comparator')
+    pst_comparator_buffer = io.BytesIO()
+    pst_comparator.to_excel(pst_comparator_buffer, index=False, engine='openpyxl')
+    upload_file_to_box(user_client, pst_comparator_buffer, pst_box_folder_id, pst_comparator_file_name)
 
 def wells_file_prep(sdk, user_client, wells_look_id, wells_comparator_look_id):
 
@@ -234,6 +248,48 @@ def wells_file_prep(sdk, user_client, wells_look_id, wells_comparator_look_id):
     wells_comparator.to_excel(wells_comparator_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, wells_comparator_buffer, wells_box_folder_id, wells_comparator_file_name)
     
+def opr_file_prep(sdk, user_client, opr_look_ids):
+
+
+    logging.info('inside opr prep')
+    tmp_file_path = '/tmp/report.xlsx'
+    tmp_image_path = '/tmp/image.png'
+
+    delinquency = run_look_and_clean_df(sdk, look_id['OPR']['delinquency'], 'Payment Status Tracker')
+    del_vs_count = run_look_and_save_png(sdk, look_id['OPR']['del_vs_count'], tmp_image_path)
+    maturity_date = run_look_and_clean_df(sdk, look_id['OPR']['maturity_date'], 'Payment Status Tracker')
+    loan_level_opr = run_look_and_clean_df(sdk, look_id['OPR']['loan_level_opr'], 'Payment Status Tracker')
+
+    with pd.ExcelWriter(file_path, engine = 'openpyxl') as writer:
+
+        delinquency.to_excel(writer, sheet_name = 'Summary', index=False, startrow= 3)
+        maturity_date.to_excel(writer, sheet_name = 'Summary', index=False, startcol= 7, startrow= 3)
+        loan_level_opr.to_excel(writer, sheet_name = 'OPR - Loan Level Data', index=False)
+
+    wb = openpyxl.load_workbook(tmp_file_path)
+    ws = wb['Summary']
+
+    ws.merge_cells('A2:E2')
+    ws['A2'] = 'Delinquency'
+    ws['A2'].alignment = Alignment(horizontal='center', vertical='center')
+
+    ws.merge_cells('H2:K2')
+    ws['H2'] = 'Maturity Date'
+    ws['H2'].alignment = Alignment(horizontal='center', vertical='center')
+
+    wb.save(tmp_file_path)
+
+    wb = openpyxl.load_workbook(tmp_file_path)
+    wb.create_sheet("Delinquency Vs Count",1)
+    ws = wb["Delinquency Vs Count"]
+    img = openpyxl.drawing.image.Image(tmp_image_path)
+    img.anchor = 'B2'
+    img.width = 850
+    ws.add_image(img)
+
+    pst_buffer = io.BytesIO()
+    wb.save(pst_buffer)
+    upload_file_to_box(user_client, pst_buffer, opr_box_folder_id, opr_file_name)
 
 def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
 
@@ -259,5 +315,6 @@ def box_looker_conn():
     os.environ['LOOKERSDK_CLIENT_SECRET'] = looker_creds['LOOKERSDK_CLIENT_SECRET']
     sdk = looker_sdk.init40()
 
-    pst_file_prep(sdk, user_client, look_id['pst'])
+    pst_file_prep(sdk, user_client, look_id['pst'], look_id['pst_comparator'])
     wells_file_prep(sdk, user_client, look_id['wells_ips'], look_id['wells_comparator'])
+    opr_file_prep(sdk, user_client, look_id['OPR'])
