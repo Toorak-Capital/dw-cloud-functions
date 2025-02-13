@@ -7,6 +7,7 @@ import pandas as pd
 from variables import *
 import re
 import google.cloud.logging
+from google.cloud import storage
 client = google.cloud.logging.Client()
 client.setup_logging()
 
@@ -122,6 +123,18 @@ def trigger_on_repo_file_upload(cloudevent, context):
 
     file_path = file_path.replace('projects/_/buckets/','').replace('objects/','')
     file_name = file_name.lower()
+
+    parts = file_path.split("/", 1)  # split into bucket & file path
+    bucket_name, obj_file_path = parts[0], parts[1]
+
+    # Initialize GCS client
+    storage_client = storage.Client()
+    storage_bucket = storage_client.bucket(bucket_name)
+    blob = storage_bucket.blob(obj_file_path)
+
+    if blob.exists():
+        print(f'{obj_file_path} is already processed')
+        return
 
     status_code = 200
     if '.xlsx' not in file_name:
