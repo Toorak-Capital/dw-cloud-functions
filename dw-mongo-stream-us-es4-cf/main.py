@@ -57,7 +57,7 @@ def get_documents(collection, data_from=None):
     logging.info('No of documents: %s', len(documents))
     
     # Flatten nested JSON
-    df = pd.json_normalize(documents)
+    df = pd.json_normalize(documents, sep='_')
     df = df.astype(str)
 
     logging.info('DTypes: %s', df.dtypes)
