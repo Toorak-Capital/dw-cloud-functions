@@ -1,4 +1,4 @@
-from pst_emailer.variables import *
+from pst_comparator_emailer.variables import *
 from send_email import *
 import pandas as pd
 import numpy as np
@@ -10,11 +10,11 @@ from google.cloud import storage
 
 file_path = '/tmp/output.xlsx'
 
-def pst_emailer(file_name, sdk, email_api, bucket, get_bucket):
+def pst_comparator_emailer(file_name, sdk, email_api, bucket, get_bucket):
 
         
-    recipients_ = pst_report_recipients
-    cc_ = pst_report_cc
+    recipients_ = pst_comparator_recipients
+    cc_ = pst_comparator_cc
     attachments_ = b""
     title_ = file_name
     text_ = ''
@@ -25,7 +25,6 @@ def pst_emailer(file_name, sdk, email_api, bucket, get_bucket):
         <br>
         Please find below the link to report name.<br>Please let us know if you face any issues.<br>
         <ul>
-            <li><a href="https://toorakcapital.cloud.looker.com/dashboards/346">Looker Report</a></li>
             <li><a href="https://toorakcapital.box.com/s/szb970nur4nnrjwkstt021kwf7pvk13b">Box Folder</a></li>
         </ul>
         
