@@ -44,8 +44,8 @@ bucket_folder_pairs_dest = [
         {'BSI-Merchants': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI-Merchants/to-process-v2/Status', 0)},
         {'BZ': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/to-process-v2', 0)},
         {'CSL': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'csl/to-process-v2/CSL_Running_Balances', 0)},
-        {'Lending_Home': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'lending-home/to-process-v2/lendinghome', 0)},
-        {'Lima': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'lima/to-process-v2/lima', 0)},
+        # {'Lending_Home': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'lending-home/to-process-v2/lendinghome', 0)},
+        # {'Lima': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'lima/to-process-v2/lima', 0)},
         {'BSI_Toorak_EscrowFPI': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI/to-process-v2/Toorak_EscrowFPI', 0)}
         ]
 
