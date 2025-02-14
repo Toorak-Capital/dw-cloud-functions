@@ -20,6 +20,7 @@ look_id = {'wells_ips' : '250',
 
 wells_box_folder_id = '240730218734'
 pst_box_folder_id = '302849922519'
+pst_comp_box_folder_id = '307485856166'
 opr_box_folder_id = '306984211160'
 
 
