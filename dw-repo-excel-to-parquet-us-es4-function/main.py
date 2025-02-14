@@ -7,6 +7,7 @@ import pandas as pd
 from variables import *
 import re
 import google.cloud.logging
+from google.cloud import storage
 client = google.cloud.logging.Client()
 client.setup_logging()
 
@@ -102,7 +103,33 @@ def write_parquet_file(df, file_date, warehouseline,type):
         file_path = f"gs://{destination_bucket}/Repo/toorak_transaction_action_detail/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet"
     elif type=='toorak_agg':
         file_path = f"gs://{destination_bucket}/Repo/toorak_agg/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet"
-    df.to_parquet(file_path, compression='snappy')
+    partition_folder_path = file_path[:file_path.rfind("/") + 1]
+    if not folder_has_files(partition_folder_path):
+        df.to_parquet(file_path, compression='snappy')
+    else:
+        print('Parquet file is already present')
+
+def folder_has_files(gcs_path):
+    # Extract bucket name and folder path
+    parts = gcs_path[5:].split("/", 1)  # Remove 'gs://' and split into bucket & folder path
+    bucket_name, folder_path = parts[0], parts[1]
+
+    # Ensure folder path ends with a slash
+    if not folder_path.endswith("/"):
+        folder_path += "/"
+
+    # Initialize GCS client
+    client = storage.Client()
+    blobs = client.list_blobs(bucket_name, prefix=folder_path)
+
+    # Check if at least one file exists
+    for blob in blobs:
+        if not blob.name.endswith("/"):  # Ensure it's a file, not a directory marker
+            # print(f"✅ At least one file exists in {gcs_path}")
+            return True
+
+    # print(f"❌ No files found in {gcs_path}")
+    return False
 
 def trigger_on_repo_file_upload(cloudevent, context):
     '''
