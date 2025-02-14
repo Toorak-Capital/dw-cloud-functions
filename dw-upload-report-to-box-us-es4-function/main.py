@@ -232,7 +232,7 @@ def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id):
     pst_comparator = run_look_and_clean_df(sdk, pst_comparator_look_id,'Pst Comparator')
     pst_comparator_buffer = io.BytesIO()
     pst_comparator.to_excel(pst_comparator_buffer, index=False, engine='openpyxl')
-    upload_file_to_box(user_client, pst_comparator_buffer, pst_box_folder_id, pst_comparator_file_name)
+    upload_file_to_box(user_client, pst_comparator_buffer, pst_comp_box_folder_id, pst_comparator_file_name)
 
 def wells_file_prep(sdk, user_client, wells_look_id, wells_comparator_look_id):
 
