@@ -262,25 +262,27 @@ def opr_file_prep(sdk, user_client, opr_look_ids):
 
     with pd.ExcelWriter(tmp_file_path, engine = 'openpyxl') as writer:
 
-        delinquency.to_excel(writer, sheet_name = 'Summary', index=False, startrow= 3)
-        maturity_date.to_excel(writer, sheet_name = 'Summary', index=False, startcol= 7, startrow= 3)
-        loan_level_opr.to_excel(writer, sheet_name = 'OPR - Loan Level Data', index=False)
+        delinquency.to_excel(writer, sheet_name = 'Delinquency', index=False, startrow= 3)
+        maturity_date.to_excel(writer, sheet_name = 'Maturity Date', index=False, startrow= 3)
+        loan_level_opr.to_excel(writer, sheet_name = 'OPR - Loan Level data', index=False)
+
 
     wb = openpyxl.load_workbook(tmp_file_path)
-    ws = wb['Summary']
+    ws = wb['Delinquency']
 
     ws.merge_cells('A2:E2')
     ws['A2'] = 'Delinquency'
     ws['A2'].alignment = Alignment(horizontal='center', vertical='center')
 
-    ws.merge_cells('H2:K2')
-    ws['H2'] = 'Maturity Date'
-    ws['H2'].alignment = Alignment(horizontal='center', vertical='center')
+    ws = wb['Maturity Date']
+    ws.merge_cells('A2:E2')
+    ws['A2'] = 'Maturity Date'
+    ws['A2'].alignment = Alignment(horizontal='center', vertical='center')
 
     wb.save(tmp_file_path)
 
     wb = openpyxl.load_workbook(tmp_file_path)
-    wb.create_sheet("Delinquency Vs Count",1)
+    wb.create_sheet("Delinquency Vs Count",2)
     ws = wb["Delinquency Vs Count"]
     img = openpyxl.drawing.image.Image(tmp_image_path)
     img.anchor = 'B2'
