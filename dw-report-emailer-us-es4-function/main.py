@@ -25,6 +25,7 @@ from diligence_emailer.diligence_emailer import *
 from risk_score_emailer.risk_score_emailer import *
 from table_funding_emailer.table_funding import *
 from pst_emailer.pst_emailer import *
+from pst_comparator_emailer.pst_comparator_emailer import *
 
 
 start_time = time.time()
@@ -164,6 +165,9 @@ def lambda_handler(request):
         elif request_json['report'] == 'pst_daily':
             file_name = f'{email_type} Payment Status Tracker Report - {date_for_mail}'.lstrip()
             response = pst_emailer(file_name, sdk, email_api, bucket, get_bucket)
+
+            file_name = f'{email_type} PST Comparator - {date_for_mail}'.lstrip()
+            response = pst_comparator_emailer(file_name, sdk, email_api, bucket, get_bucket)
         
         
         elif request_json['report'] == 'risk_score_weekly_report':
