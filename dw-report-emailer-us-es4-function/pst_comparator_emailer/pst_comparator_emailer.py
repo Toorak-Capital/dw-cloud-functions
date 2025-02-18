@@ -25,7 +25,7 @@ def pst_comparator_emailer(file_name, sdk, email_api, bucket, get_bucket):
         <br>
         Please find below the link to report name.<br>Please let us know if you face any issues.<br>
         <ul>
-            <li><a href="https://toorakcapital.box.com/s/szb970nur4nnrjwkstt021kwf7pvk13b">Box Folder</a></li>
+            <li><a href="https://toorakcapital.app.box.com/s/1po6g384dx1287mgtpjq42vxpaz118zz">Box Folder</a></li>
         </ul>
         
         <br>Thanks,<br>Toorak.<br>
