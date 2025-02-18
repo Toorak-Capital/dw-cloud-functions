@@ -1,0 +1,5 @@
+functions-framework==3.*
+google-cloud-secret-manager
+pysftp
+google-cloud-storage
+os

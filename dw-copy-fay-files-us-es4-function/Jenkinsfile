@@ -1,0 +1,15 @@
+@Library('jenkins-shared-library') _
+def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-copy-fay-files-us-es4-cf \
+                                    --gen2 \
+                                    --runtime=python311 \
+                                    --region=us-east4 --source=dw-copy-fay-files-us-es4-function\
+                                    --entry-point=fetch_sftp_files \
+                                    --set-env-vars stage=ENVIRONMENT_NAME,project_id=${env.project_id} \
+                                    --memory=512MB \
+                                    --timeout=360 \
+                                    --trigger-http \
+                                    --service-account=dw-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
+                                    --update-labels product=dw  \
+                                    --update-labels environment=ENVIRONMENT_NAME \
+                                    --update-labels deployedby=cicd"], githubUrl: "https://github.com/Toorak-Capital/dw-cloud-functions.git"]
+serverlessDeploy(config)
