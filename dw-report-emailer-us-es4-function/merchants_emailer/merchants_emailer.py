@@ -51,7 +51,7 @@ def modify_excel_cells(ws, rows_to_modify):
                     pass
 
 # Define USD currency format
-    usd_format = '#,##0.00'
+    usd_format = '#,##0'
              
     specific_rows = [8, 9, 10, 11, 12, 13, 14, 15, 16, 34, 44]
 
