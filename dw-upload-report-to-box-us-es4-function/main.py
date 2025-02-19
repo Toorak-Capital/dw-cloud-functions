@@ -296,7 +296,7 @@ def opr_file_prep(sdk, user_client, opr_look_ids):
 
     pst_buffer = io.BytesIO()
     wb.save(pst_buffer)
-    logging.info(f"{file_name} saved in tmp path")
+    logging.info(f"{opr_file_name} saved in tmp path")
     upload_file_to_box(user_client, pst_buffer, opr_box_folder_id, opr_file_name)
 
 def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
