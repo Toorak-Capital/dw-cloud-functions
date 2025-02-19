@@ -28,7 +28,7 @@ def calculate_md5(file_path):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-def fetch_sftp_files():
+def fetch_sftp_files(event):
     """Fetches files from SFTP and uploads them to GCS if new or updated."""
     remote_dir = "/fayservicing/Toorak/"
     local_dir = "/tmp"
