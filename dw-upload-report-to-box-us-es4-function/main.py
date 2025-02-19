@@ -11,6 +11,7 @@ from boxsdk import JWTAuth,Client
 import os
 import re
 from datetime import datetime
+import time
 from google.cloud import bigquery
 from google.cloud import storage
 from variables import *
@@ -226,10 +227,12 @@ def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id):
 
     pst_buffer = io.BytesIO()
     wb.save(pst_buffer)
+    logging.info(f"pst file saved in tmp path")
     upload_file_to_box(user_client, pst_buffer, pst_box_folder_id, pst_file_name)
 
     logging.info('pst comparator begin')
     pst_comparator = run_look_and_clean_df(sdk, pst_comparator_look_id,'Pst Comparator')
+    logging.info(f"pst comparator prep done")
     pst_comparator_buffer = io.BytesIO()
     pst_comparator.to_excel(pst_comparator_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, pst_comparator_buffer, pst_comp_box_folder_id, pst_comparator_file_name)
@@ -238,12 +241,14 @@ def wells_file_prep(sdk, user_client, wells_look_id, wells_comparator_look_id):
 
     logging.info('wells prep begin')
     wells_df = run_look_and_clean_df(sdk, wells_look_id,'Wells Ips')
+    logging.info(f"wells prep done")
     wells_buffer = io.BytesIO()
     wells_df.to_excel(wells_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, wells_buffer, wells_box_folder_id, wells_file_name)
 
     logging.info('wells comparator begin')
     wells_comparator = run_look_and_clean_df(sdk, wells_comparator_look_id,'Wells Comparision')
+    logging.info(f"wells comparator prep done")
     wells_comparator_buffer = io.BytesIO()
     wells_comparator.to_excel(wells_comparator_buffer, index=False, engine='openpyxl')
     upload_file_to_box(user_client, wells_comparator_buffer, wells_box_folder_id, wells_comparator_file_name)
@@ -291,10 +296,12 @@ def opr_file_prep(sdk, user_client, opr_look_ids):
 
     pst_buffer = io.BytesIO()
     wb.save(pst_buffer)
+    logging.info(f"{file_name} saved in tmp path")
     upload_file_to_box(user_client, pst_buffer, opr_box_folder_id, opr_file_name)
 
 def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
 
+    logging.info(f"inside upload file function")
     buffer.seek(0)
     uploaded_file = user_client.folder(box_folder_id).upload_stream(buffer, file_name=file_name)
     logging.info(f"{file_name} is uploaded to box successfully")
@@ -318,5 +325,7 @@ def box_looker_conn():
     sdk = looker_sdk.init40()
 
     pst_file_prep(sdk, user_client, look_id['pst'], look_id['pst_comparator'])
+    time.sleep(300)
     wells_file_prep(sdk, user_client, look_id['wells_ips'], look_id['wells_comparator'])
+    time.sleep(300)
     opr_file_prep(sdk, user_client, look_id['OPR'])
