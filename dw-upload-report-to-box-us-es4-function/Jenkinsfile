@@ -6,7 +6,7 @@ def config = [serverlessCommand: ["dw-ENVIRONMENT_NAME-upload-report-to-box-us-e
                                     --entry-point=check_pipeline_run \
                                     --set-env-vars stage=ENVIRONMENT_NAME,project_id=${env.project_id} \
                                     --memory=1024MB \
-                                    --timeout=300 \
+                                    --timeout=2000 \
                                     --trigger-http \
                                     --service-account=dw-ENVIRONMENT_NAME-cloud-function-sa@${env.project_id}.iam.gserviceaccount.com \
                                     --update-labels product=dw  \
