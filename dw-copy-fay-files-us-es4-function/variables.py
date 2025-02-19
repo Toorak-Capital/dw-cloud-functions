@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from google.cloud import secretmanager_v1
 import json
+import ast
 
 env = os.environ.get('stage', 'prod')
 project_id = os.environ.get('project_id', 'np-toorak')
@@ -30,3 +31,4 @@ def get_secret(secret_id):
         return secret_data
 
 fay_sftp_credentials = get_secret(fay_sftp_credentials_key)
+fay_sftp_credentials = ast.literal_eval(fay_sftp_credentials)
