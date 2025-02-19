@@ -302,9 +302,16 @@ def opr_file_prep(sdk, user_client, opr_look_ids):
 def upload_file_to_box(user_client, buffer, box_folder_id, file_name):
 
     logging.info(f"inside upload file function")
-    buffer.seek(0)
-    uploaded_file = user_client.folder(box_folder_id).upload_stream(buffer, file_name=file_name)
-    logging.info(f"{file_name} is uploaded to box successfully")
+
+    try:
+        
+        buffer.seek(0)
+        uploaded_file = user_client.folder(box_folder_id).upload_stream(buffer, file_name=file_name)
+        logging.info(f"{file_name} is uploaded to box successfully")
+
+    except Exception as e:
+
+        logging.error(f"An error occurred: {e}")
 
 
 
