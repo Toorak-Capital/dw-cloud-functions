@@ -58,10 +58,10 @@ def audit_reports():
         result.reset_index(drop=True, inplace=True)
         file_path = f'gs://dw-prod-bronze-purchased-loan-us-es4-gcs/audit_report/latest_{report}_report.xlsx'
         if report == 'bridge':
-            file_path = f'gs://dw-prod-bronze-purchased-loan-us-es4-gcs/audit_report/bridge/final_reports/latest_{report}_report.xlsx'
+            file_path = f'gs://dw-prod-bronze-purchased-loan-us-es4-gcs/audit_report/latest_{report}_report.xlsx'
             result.rename(columns={'Bridge Audit Report Toorak Loan ID': 'Toorak Loan ID', 'Bridge Audit Report Category': 'Loan Field', 'Bridge Audit Report Loan Info': 'Loan Info', 'Bridge Audit Report Tpr': 'TPR'}, inplace=True)
         else:
-            file_path = f'gs://dw-prod-bronze-purchased-loan-us-es4-gcs/audit_report/dscr/final_reports/latest_{report}_report.xlsx'
+            file_path = f'gs://dw-prod-bronze-purchased-loan-us-es4-gcs/audit_report/latest_{report}_report.xlsx'
             result.rename(columns={'Bridge Dscr Report Toorak Loan ID': 'Toorak Loan ID', 'Bridge Dscr Report Loan Field': 'Loan Field', 'Bridge Dscr Report Loan Info': 'Loan Info', 'Bridge Dscr Report Tpr': 'TPR'}, inplace=True)
         with pd.ExcelWriter(file_path) as writer:
             result.to_excel(writer, sheet_name = f'latest_{report}_report')
