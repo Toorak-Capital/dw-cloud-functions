@@ -2,6 +2,9 @@ import os
 import pysftp
 from google.cloud import storage
 from variables import *
+import ast
+from google.cloud import secretmanager_v1
+import json
 
 def upload_to_gcs(bucket_name, file_name, local_path):
     """Uploads a file to GCS bucket if it's new or updated."""
@@ -28,6 +31,19 @@ def calculate_md5(file_path):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
+def get_secret(secret_id):
+
+    client = secretmanager_v1.SecretManagerServiceClient()
+    name = f"projects/{secret_project_id}/secrets/{secret_id}/versions/latest"
+    response = client.access_secret_version(name=name)
+    secret_data = response.payload.data.decode("UTF-8")
+    try:
+        secret_dict = json.loads(secret_data)
+        return secret_dict
+    except json.JSONDecodeError:
+        # If it's not JSON, return the data as a plain string
+        return secret_data
+
 def fetch_sftp_files(event):
     """Fetches files from SFTP and uploads them to GCS if new or updated."""
     remote_dir = "/fayservicing/Toorak/"
@@ -35,6 +51,9 @@ def fetch_sftp_files(event):
     
     cnopts = pysftp.CnOpts()
     cnopts.hostkeys = None
+
+    fay_sftp_credentials = get_secret(fay_sftp_credentials_key)
+    fay_sftp_credentials = ast.literal_eval(fay_sftp_credentials)
     
     with pysftp.Connection(fay_sftp_credentials['host'], username=fay_sftp_credentials['username'], password=fay_sftp_credentials['password'], cnopts=cnopts) as sftp:
         with sftp.cd(remote_dir):
