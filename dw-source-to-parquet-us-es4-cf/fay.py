@@ -1,6 +1,9 @@
 import re
 from variables import *
 from main import *
+import uuid
+from google.cloud import storage
+from datetime import datetime
 
 def extract_date(input_string):
     '''
@@ -23,62 +26,44 @@ def extract_date(input_string):
         return None
 
 
+# Mapping of file path patterns to subfolders
+FAY_SUBFOLDERS = {
+    "Fay_BK": "Fay_BK",
+    "Fay_BPO": "Fay_BPO",
+    "Fay_Comments": "Fay_Comments",
+    "Fay_COVID-19_Pandemic_Assistance": "Fay_COVID-19_Pandemic_Assistance",
+    "Fay_EDW_FC": "Fay_EDW_FC",
+    "Fay_Escrow": "Fay_Escrow",
+    "Fay_FCL": "Fay_FCL",
+    "Fay_LossMit": "Fay_LossMit",
+    "Fay_Modification": "Fay_Modification",
+    "Fay_Standard": "Fay_Standard",
+    "Fay_Supplemental": "Fay_Supplemental",
+}
+
 def trigger_on_fay_report(file_path, file_uri):
     formatted_date = extract_date(file_path)
-    
-    
+    if not formatted_date:
+        raise ValueError(f"Could not extract date from file path: {file_path}")
+
     df = read_csv(file_uri)
-    
+
+    # If the file is empty or has no columns, stop further processing
     if df.empty or len(df.columns) == 0:
         print('File is empty. No further action taken.')
         raise Exception('File is empty. No further action taken.')
+
+    # Determine the subfolder dynamically from the file path
+    sub_folders = [
+        "Fay_BK", "Fay_BPO", "Fay_Comments", "Fay_COVID-19_Pandemic_Assistance",
+        "Fay_EDW_FC", "Fay_Escrow", "Fay_FCL", "Fay_LossMit", "Fay_Modification",
+        "Fay_Standard", "Fay_Supplemental", "Fay_TaxesInsurance"
+    ]
+
+    # Check which subfolder the file belongs to
+    sub_folder = next((folder for folder in sub_folders if folder in file_path), "Fay_TaxesInsurance")
+
+    # Call write_parquet_file function
+    write_parquet_file(df, "Fay", sub_folder, formatted_date)
     
-    elif 'Fay/Fay_BK' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_BK/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_BPO' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_BPO/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_Comments' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_Comments/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_COVID-19_Pandemic_Assistance' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_COVID-19_Pandemic_Assistance/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_EDW_FC' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_EDW_FC/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_Escrow' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_Escrow/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_FCL' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_FCL/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_LossMit' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_LossMit/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_Modification' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_Modification/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_Standard' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_Standard/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    elif 'Fay/Fay_Supplemental' in file_path:
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_Supplemental/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    else:  # This handles Fay_TaxesInsurance as well as unknown cases
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/Fay/Fay_TaxesInsurance/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
-    print('Successfully wrote the FAY Parquet file!')
+    print(f"Successfully wrote the Fay {sub_folder} Parquet file!")
