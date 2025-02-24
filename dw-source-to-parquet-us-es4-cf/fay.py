@@ -24,7 +24,21 @@ def extract_date(input_string):
         return formatted_date
     else:
         return None
-
+    
+def rename_columns(df):
+    try:
+        renamed_columns = {}
+        for col in df.columns:
+            new_col = col
+            if col[0].isdigit():
+                new_col = '_' + col
+            if '.' in col:
+                new_col = new_col.replace('.', '_')
+            renamed_columns[col] = new_col
+        return df.rename(columns=renamed_columns)
+    except Exception as e:
+        print(f"An error occurred while renaming columns: {e}")
+        return None
 
 # Mapping of file path patterns to subfolders
 FAY_SUBFOLDERS = {
@@ -39,9 +53,13 @@ FAY_SUBFOLDERS = {
     "Fay_Modification": "Fay_Modification",
     "Fay_Standard": "Fay_Standard",
     "Fay_Supplemental": "Fay_Supplemental",
+    "Fay_TaxesInsurance": "Fay_TaxesInsurance",  # Default if none match
 }
 
 def trigger_on_fay_report(file_path, file_uri):
+    """
+    Processes Fay report files by extracting date, renaming columns, and saving as Parquet dynamically.
+    """
     formatted_date = extract_date(file_path)
     if not formatted_date:
         raise ValueError(f"Could not extract date from file path: {file_path}")
@@ -53,17 +71,13 @@ def trigger_on_fay_report(file_path, file_uri):
         print('File is empty. No further action taken.')
         raise Exception('File is empty. No further action taken.')
 
-    # Determine the subfolder dynamically from the file path
-    sub_folders = [
-        "Fay_BK", "Fay_BPO", "Fay_Comments", "Fay_COVID-19_Pandemic_Assistance",
-        "Fay_EDW_FC", "Fay_Escrow", "Fay_FCL", "Fay_LossMit", "Fay_Modification",
-        "Fay_Standard", "Fay_Supplemental", "Fay_TaxesInsurance"
-    ]
+    # Rename columns to ensure compatibility
+    df = rename_columns(df)
 
-    # Check which subfolder the file belongs to
-    sub_folder = next((folder for folder in sub_folders if folder in file_path), "Fay_TaxesInsurance")
+    # Determine the correct subfolder dynamically
+    sub_folder = next((folder for folder in FAY_SUBFOLDERS if folder in file_path), "Fay_TaxesInsurance")
 
-    # Call write_parquet_file function
+    # Write the DataFrame to Parquet
     write_parquet_file(df, "Fay", sub_folder, formatted_date)
     
     print(f"Successfully wrote the Fay {sub_folder} Parquet file!")
