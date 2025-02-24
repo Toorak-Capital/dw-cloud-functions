@@ -54,17 +54,26 @@ def fetch_sftp_files(event):
 
     fay_sftp_credentials = get_secret(fay_sftp_credentials_key)
     fay_sftp_credentials = ast.literal_eval(fay_sftp_credentials)
+
+    try:
+        with pysftp.Connection(fay_sftp_credentials['host'], username=fay_sftp_credentials['username'], password=fay_sftp_credentials['password'], cnopts=cnopts) as sftp:
+            with sftp.cd(remote_dir):
+                files = [file for file in sftp.listdir_attr() if not file.longname.startswith("d") and file.filename.startswith("Fay_")]
+                for file in files:
+                    remote_file_path = f"{remote_dir}/{file.filename}"
+                    local_file_path = os.path.join(local_dir, file.filename)
+                    
+                    sftp.get(remote_file_path, local_file_path)  # Download file
+                    print(f"Downloaded to Local: {file.filename}")
+                    
+                    upload_to_gcs(gcs_bucket, file.filename, local_file_path)  # Upload to GCS if new or updated
+                    print(f"Uploaded to GCS: {file.filename}")
+                    os.remove(local_file_path)  # Cleanup local file
+    except Exception as e:
+            print(f"Encountered an error copying file: {file.filename}. Error Details: {e}")
     
-    with pysftp.Connection(fay_sftp_credentials['host'], username=fay_sftp_credentials['username'], password=fay_sftp_credentials['password'], cnopts=cnopts) as sftp:
-        with sftp.cd(remote_dir):
-            files = [file for file in sftp.listdir_attr() if not file.longname.startswith("d") and file.filename.startswith("Fay_")]
-            for file in files:
-                remote_file_path = f"{remote_dir}/{file.filename}"
-                local_file_path = os.path.join(local_dir, file.filename)
-                
-                sftp.get(remote_file_path, local_file_path)  # Download file
-                print(f"Downloaded to Local: {file.filename}")
-                
-                upload_to_gcs(gcs_bucket, file.filename, local_file_path)  # Upload to GCS if new or updated
-                print(f"Uploaded to GCS: {file.filename}")
-                os.remove(local_file_path)  # Cleanup local file
+    
+    return {
+            'statusCode': 200,
+            'body': json.dumps('Completed copying all the files.')
+           }
