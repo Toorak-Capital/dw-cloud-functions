@@ -191,7 +191,7 @@ def run_look_and_save_png(sdk, look_id, file_path):
     image = Image.open(io.BytesIO(response))
     image.save(file_path)
 
-def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id):
+def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id, pst_comparator_summary_look_id):
 
 
     logging.info('inside pst prep')
@@ -231,10 +231,20 @@ def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id):
     upload_file_to_box(user_client, pst_buffer, pst_box_folder_id, pst_file_name)
 
     logging.info('pst comparator begin')
+    pst_comparator_tmp_file = '/tmp/pst_comparator_report.xlsx'
     pst_comparator = run_look_and_clean_df(sdk, pst_comparator_look_id,'Pst Comparator')
+    pst_comparator_summary = run_look_and_clean_df(sdk, pst_comparator_summary_look_id,'Pst Comparator')
+    pst_comparator_summary = pst_comparator_summary.replace(np.nan, 'Grand Total')
+
+    with pd.ExcelWriter(pst_comparator_tmp_file, engine='openpyxl') as writer:
+        pst_comparator_summary.to_excel(writer, index=False, header=True, sheet_name='Summary')
+        pst_comparator.to_excel(writer, index=False, header=True, sheet_name='PST Comparator')
+    
+    wb = load_workbook(pst_comparator_tmp_file)
+    
     logging.info(f"pst comparator prep done")
     pst_comparator_buffer = io.BytesIO()
-    pst_comparator.to_excel(pst_comparator_buffer, index=False, engine='openpyxl')
+    wb.save(pst_comparator_buffer)
     upload_file_to_box(user_client, pst_comparator_buffer, pst_comp_box_folder_id, pst_comparator_file_name)
 
 def wells_file_prep(sdk, user_client, wells_look_id, wells_comparator_look_id):
@@ -331,7 +341,7 @@ def box_looker_conn():
     os.environ['LOOKERSDK_CLIENT_SECRET'] = looker_creds['LOOKERSDK_CLIENT_SECRET']
     sdk = looker_sdk.init40()
 
-    pst_file_prep(sdk, user_client, look_id['pst'], look_id['pst_comparator'])
+    pst_file_prep(sdk, user_client, look_id['pst'], look_id['pst_comparator'], look_id['pst_comparator_summary'])
     time.sleep(300)
     wells_file_prep(sdk, user_client, look_id['wells_ips'], look_id['wells_comparator'])
     time.sleep(300)
