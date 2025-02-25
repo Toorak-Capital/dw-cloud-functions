@@ -29,9 +29,9 @@ def get_secret(secret_id):
     secret_data = response.payload.data.decode("UTF-8")
 
     try:
-        return json.loads(secret_data)  # Return JSON object if possible
+        return json.loads(secret_data)
     except json.JSONDecodeError:
-        return secret_data  # Otherwise, return as plain text
+        return secret_data
 
 def fetch_sftp_files(event):
     """Fetches files from SFTP and uploads them to GCS if new or updated."""
@@ -49,7 +49,7 @@ def fetch_sftp_files(event):
             with sftp.cd(remote_dir):
                 # Get the current time and calculate the cutoff time (7 days ago)
                 now = time.time()
-                cutoff_time = now - (7 * 86400)  # 7 days in seconds
+                cutoff_time = now - (7 * 86400)
                 # Filter files modified in the last 7 days
                 files = [
                     file for file in sftp.listdir_attr()
@@ -62,7 +62,7 @@ def fetch_sftp_files(event):
                     remote_file_path = f"{remote_dir}/{file.filename}"
                     local_file_path = os.path.join(local_dir, file.filename)
 
-                    sftp.get(remote_file_path, local_file_path)  # Download file
+                    sftp.get(remote_file_path, local_file_path)
                     print(f"Downloaded to Local: {file.filename}")
 
                     upload_to_gcs(gcs_bucket, file.filename, local_file_path)  # Upload to GCS if new or updated
