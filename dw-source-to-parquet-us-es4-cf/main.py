@@ -18,6 +18,7 @@ from nation_star import *
 from toorak_servicer import *
 from cpu_interest_rate import *
 from asset_management import *
+from fay import *
 
 
 
@@ -97,6 +98,11 @@ def lambda_handler(request, context):
     elif event_type == 'OBJECT_FINALIZE' and 'ToorakAssetManagement/AM Consolidated' in file_path:
         trigger_on_am_report(file_path, file_uri)
         print("Uploaded Toorak Asset Management successfully")
+
+    elif event_type == 'OBJECT_FINALIZE' and 'Fay/' in file_path:
+        trigger_on_fay_report(file_path, file_uri)
+        print("Uploaded Fay Servicer Report successfully")
+
     else:
         print("Nothing happened")
     
