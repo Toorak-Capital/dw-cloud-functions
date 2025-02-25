@@ -168,6 +168,9 @@ def lambda_handler(request):
 
             file_name = f'{email_type} PST Comparator - {date_for_mail}'.lstrip()
             response = pst_comparator_emailer(file_name, sdk, email_api, bucket, get_bucket)
+
+            file_name = f'{email_type} Originator Performance Report - {date_for_mail}'.lstrip()
+            response = opr_emailer(file_name, sdk, email_api, bucket, get_bucket)
         
         
         elif request_json['report'] == 'risk_score_weekly_report':
