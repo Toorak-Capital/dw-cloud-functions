@@ -11,6 +11,7 @@ look_id = {'wells_ips' : '250',
                     'pst_dscr_summary' : '254'},
             'wells_comparator' : '255',
             'pst_comparator' : '261',
+            'pst_comparator_summary' : '269',
             'OPR' : {
                 'delinquency' : '257',
                 'del_vs_count' : '256',
