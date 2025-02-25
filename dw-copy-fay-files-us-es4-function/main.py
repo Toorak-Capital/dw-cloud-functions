@@ -5,8 +5,7 @@ from variables import *
 import ast
 from google.cloud import secretmanager_v1
 import json
-import base64
-import hashlib
+import time
 
 def upload_to_gcs(bucket_name, file_name, local_path):
     """Uploads a file to GCS bucket only if it's new or updated."""
@@ -15,23 +14,12 @@ def upload_to_gcs(bucket_name, file_name, local_path):
     blob = bucket.blob(f"Fay/{file_name}")
 
     if blob.exists(client):
-        existing_md5 = base64.b64decode(blob.md5_hash).hex()  # Convert base64 MD5 to hex
-        local_md5 = calculate_md5(local_path)
-
-        if existing_md5 == local_md5:
-            print(f"Skipping {file_name}, no changes detected.")
-            return
+        print(f"Skipping {file_name}, it already exists.")
+        return
+            
     
     blob.upload_from_filename(local_path)
     print(f"Uploaded {file_name} to {bucket_name}")
-
-def calculate_md5(file_path):
-    """Calculates MD5 checksum of a file."""
-    hash_md5 = hashlib.md5()
-    with open(file_path, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
-            hash_md5.update(chunk)
-    return hash_md5.hexdigest()
 
 def get_secret(secret_id):
     """Fetches secrets from Google Secret Manager."""
@@ -59,7 +47,16 @@ def fetch_sftp_files(event):
     try:
         with pysftp.Connection(fay_sftp_credentials['host'], username=fay_sftp_credentials['username'], password=fay_sftp_credentials['password'], cnopts=cnopts) as sftp:
             with sftp.cd(remote_dir):
-                files = [file for file in sftp.listdir_attr() if not file.longname.startswith("d") and file.filename.startswith("Fay_")]
+                # Get the current time and calculate the cutoff time (7 days ago)
+                now = time.time()
+                cutoff_time = now - (7 * 86400)  # 7 days in seconds
+                # Filter files modified in the last 7 days
+                files = [
+                    file for file in sftp.listdir_attr()
+                    if not file.longname.startswith("d")  # Exclude directories
+                    and file.filename.startswith("Fay_")  # Only process Fay_ files
+                    and file.st_mtime >= cutoff_time  # Only last 7 days
+                ]
                 
                 for file in files:
                     remote_file_path = f"{remote_dir}/{file.filename}"
