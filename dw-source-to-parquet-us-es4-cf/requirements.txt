@@ -7,6 +7,7 @@ requests
 gcsfs
 fsspec
 google-cloud-storage
+google-cloud-logging
 pyarrow
 fastparquet
 xlrd
