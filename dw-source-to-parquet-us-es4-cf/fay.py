@@ -1,7 +1,7 @@
 import re
 from variables import *
 from main import *
-from google.cloud import storage
+from traceback import format_exc
 
 
 def extract_date(input_string):
@@ -35,7 +35,7 @@ def rename_columns(df):
             renamed_columns[col] = new_col
         return df.rename(columns=renamed_columns)
     except Exception as e:
-        print(f"An error occurred while renaming columns: {e}")
+        logging.error("An error occurred while renaming columns: %s", format_exc())
         return None
 
 
@@ -45,13 +45,14 @@ def trigger_on_fay_report(file_path, file_uri):
     """
     formatted_date = extract_date(file_path)
     if not formatted_date:
+        logging.error(f"Could not extract date from file path: %s", file_path)
         raise ValueError(f"Could not extract date from file path: {file_path}")
 
     df = read_csv(file_uri)
 
     # If the file is empty or has no columns, stop further processing
     if df.empty or len(df.columns) == 0:
-        print('File is empty. No further action taken.')
+        logging.error('File is empty. No further action taken.')
         raise Exception('File is empty. No further action taken.')
 
     # Rename columns to ensure compatibility
@@ -60,8 +61,8 @@ def trigger_on_fay_report(file_path, file_uri):
     # Determine the correct subfolder dynamically
     main_folder = 'Fay'
     sub_folder = '_'.join(file_path.split('/')[-1].split('_')[:-1])
-
+    logging.info('main_folder:%s; sub_folder:%s; formatted_date:%s', main_folder, sub_folder, formatted_date)
+    
     # Write the DataFrame to Parquet
     write_parquet_by_date(df, main_folder, sub_folder, formatted_date)
-    
-    print(f"Successfully wrote the Fay {sub_folder} Parquet file!")
+    logging.info(f"Successfully wrote the Fay {sub_folder} Parquet file!")
