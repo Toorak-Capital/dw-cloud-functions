@@ -1,7 +1,6 @@
 import re
-from variables import *
-from main import *
 from traceback import format_exc
+from variables import *
 
 
 def extract_date(input_string):

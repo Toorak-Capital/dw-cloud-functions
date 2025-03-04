@@ -26,6 +26,7 @@ def read_csv(location):
     '''
     return pd.read_csv(location, dtype=str)
 
+
 def read_excel(location, sheet_name = ''):
     '''
     '''
