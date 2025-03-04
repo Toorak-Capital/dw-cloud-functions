@@ -1,6 +1,5 @@
 import re
 from variables import *
-from main import *
 
 
 def get_folder_name(input_string, folder_regex_pattern):
@@ -27,4 +26,4 @@ def trigger_on_breezeway_upload(file_path, file_uri):
     folder_name = get_folder_name(file_path, folder_regex_pattern)
     df = read_csv(file_uri)
     df['data_date'] = data_date_format
-    write_parquet_file(df, folder_name, 'breezeway_test' ,formatted_date)
+    write_parquet_file(df, folder_name, 'breezeway', formatted_date)
