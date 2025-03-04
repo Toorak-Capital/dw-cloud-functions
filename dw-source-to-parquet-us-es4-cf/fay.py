@@ -56,6 +56,7 @@ def trigger_on_fay_report(file_path, file_uri):
 
     # Rename columns to ensure compatibility
     df = rename_columns(df)
+    df = df.astype(str)
 
     # Determine the correct subfolder dynamically
     main_folder = 'Fay'
