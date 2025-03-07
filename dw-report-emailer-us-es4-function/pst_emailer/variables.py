@@ -4,7 +4,9 @@ sender_email = {"name":"noreply@toorakcapital.com","email":"noreply@toorakcapita
 
 if env == 'prod':
     
-    pst_report_recipients = [{"email":'pst@toorakcapital.com',"name":"PST Team"}]
+    pst_report_recipients = [{"email":'pst@toorakcapital.com',"name":"PST Team"},
+                             {"email":'cocoke@toorakcapital.com',"name":"Cocoke"},
+                             {"email":'spaneer@toorakcapital.com',"name":"Spaneer"},   ]
     
     pst_report_cc = [{"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya Kuppuswamy"},
                     {"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
