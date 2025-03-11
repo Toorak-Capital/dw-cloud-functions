@@ -51,25 +51,12 @@ bucket_folder_pairs_dest = [
 
 if env == 'prod':
     Recipients = [
-        {"email": "hsharma@toorakcapital.com", "name": "Harsh"},
-        {"email": "psahoo@toorakcapital.com", "name": "Premananda Sahoo"},
-        {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"},
-        {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
-        {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
-        {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"},
-        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"},
-        {"email":"diguvamaheshwarsingh@triconinfotech.com", "name":"mahesh"}
+        {"email":"ToorakDataTeam@triconinfotech.com", "name":"Toorak Data Team"},
+        {"email":"support_tech_all@toorakcapital.com", "name":"Toorak Support Team"}
         ]
 else:
     Recipients = [
-        {"email": "hsharma@toorakcapital.com", "name": "Harsh"},
-        {"email": "psahoo@toorakcapital.com", "name": "Premananda Sahoo"},
-        {"email": "mpinnamaneni@toorakcapital.com", "name": "Mounika Pinnamaneni"},
-        {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
-        {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},
-        {"email":"ToorakDataTeam@triconinfotech.com", "name":"ToorakData"},
-        {"email":"praveenkumar.vs@triconinfotech.com", "name":"Praveen"},
-        {"email":"diguvamaheshwarsingh@triconinfotech.com", "name":"mahesh"}
+        {"email":"ToorakDataTeam@triconinfotech.com", "name":"Toorak Data Team"}
         ]
     
 SendEmailCFUrl = f'https://us-east4-{project_id}.cloudfunctions.net/dw-prod-send-email-us-es4-cf'
