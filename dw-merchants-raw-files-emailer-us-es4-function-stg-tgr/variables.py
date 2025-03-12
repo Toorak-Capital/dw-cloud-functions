@@ -15,7 +15,6 @@ if env == 'prod':
     email_type = ''
 
     email_recipients = [
-        {"email":"asimanovsky@toorakcapital.com", "name":"Aleksandra Simanovsky"},
         {"email":"mbergamaschi@toorakcapital.com", "name":"Mauricio Bergamaschi"},
         {"email":"vijaylaxmi@triconinfotech.com", "name":"vijaylaxmi"},
         {"email":"sasi.jyothsna@triconinfotech.com", "name":"Sasi Jyothsna"},

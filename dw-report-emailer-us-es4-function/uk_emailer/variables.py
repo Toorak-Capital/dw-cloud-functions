@@ -18,8 +18,7 @@ uk_look_ids = {'table_1': 158,
 
 if env == 'prod':
     
-    uk_email_recipients = [{"email":'asimanovsky@toorakcapital.com',"name":"Aleksandra"},
-                        {"email":'emacan@toorakcapital.com',"name":"Edward"},
+    uk_email_recipients = [{"email":'emacan@toorakcapital.com',"name":"Edward"},
                         {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
                         {"email":"kchen@toorakcapital.com", "name":"kchen"}]
     
