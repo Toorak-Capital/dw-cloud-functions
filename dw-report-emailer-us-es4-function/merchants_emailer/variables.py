@@ -18,8 +18,7 @@ merchant_look_ids = {'purchases_1': 181,
 
 if env == 'prod':
     
-    merchant_email_recipients = [{"email":'asimanovsky@toorakcapital.com',"name":"Aleksandra"},
-                        {"email":'dyner@toorakcapital.com',"name":"Eric"},
+    merchant_email_recipients = [{"email":'dyner@toorakcapital.com',"name":"Eric"},
                         {"email":'mbergamaschi@toorakcapital.com',"name":"Mauricio"},
                         {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
                         {"email":"kchen@toorakcapital.com", "name":"kchen"}]
