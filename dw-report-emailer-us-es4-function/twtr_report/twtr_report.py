@@ -6,7 +6,6 @@ from PIL import Image
 import os
 import pandas as pd
 from datetime import *
-import numpy as np
 import openpyxl
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Alignment
