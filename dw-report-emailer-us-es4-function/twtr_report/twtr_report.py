@@ -157,7 +157,7 @@ def insert_image(sdk, ws, look_id, file_name, anchor_cell, width=700, height=300
     image.save(file_name)
 
     # Insert into worksheet
-    img = openpyxl.drawing.image.Image('view_10.png')
+    img = openpyxl.drawing.image.Image(file_name)
     img.anchor = anchor_cell
     img.width = width
     ws.add_image(img)
