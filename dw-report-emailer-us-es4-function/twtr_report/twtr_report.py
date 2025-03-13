@@ -325,16 +325,16 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     ws.delete_rows(80)
     ws.delete_rows(45)
     ws.delete_rows(67, 7)
-    move_rows(range(168, 172), range(82, 86), ws, 1)
-    move_rows(range(2, 3), range(81, 82), ws, 0)
+    move_rows(range(168, 172), range(82, 86), ws, 0)
+    move_rows(range(165, 169), range(81, 82), ws, 0)
     ws['A81'] = 'YOY'
-    ws.delete_rows(165, 5)
-    rows_to_modify = [2]
+    ws.delete_rows(165, 10)
+    rows_to_modify = [2, 81]
     modify_excel_cells(ws, rows_to_modify)
     multiply_and_format(ws, row_numbers=[20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 39, 43 ,74, 75, 76, 77], num=100)
     apply_dollar_format(ws, row_numbers=[6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 47, 55 ,56, 57, 58 ,61, 82, 84])
     apply_bold_to_cells(ws, row_numbers=[3, 4, 19, 28, 38, 42, 46, 54, 73], columns=[1])
-    apply_bold_to_cells(ws, row_numbers=[81], columns=[i for i in range(1, 53)])
+    apply_bold_to_cells(ws, row_numbers=[81], columns=[i for i in range(1, 55)])
     row_nums = [i for i in range(4, 86)]
     align(ws, row_numbers=row_nums, format="right")
     align(ws, row_numbers=[3], format="center")
