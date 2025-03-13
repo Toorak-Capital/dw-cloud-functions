@@ -31,6 +31,32 @@ def move_rows(source_range, target_range, ws, clear):
             for col in range(1, ws.max_column + 1):
                 ws.cell(row=row, column=col, value="")
 
+def auto_adjust_column_width(ws):
+    """
+    Adjusts the width of all columns, setting a fixed width for the first column
+    and adjusting the rest based on the data they contain.
+    """
+    # Set a fixed width for Column A (adjust the value as needed)
+    ws.column_dimensions['A'].width = 25  # You can change 25 to any fixed width you prefer
+
+    for col in ws.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+
+        # Skip Column A since its width is already fixed
+        if col_letter == 'A':
+            continue
+
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        
+        ws.column_dimensions[col_letter].width = max_length + 2
+
+
 
 def modify_excel_cells(ws, rows_to_modify):
     for row in rows_to_modify:
@@ -234,6 +260,10 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     columns_to_drop = yoy_data.columns[range(2, 106, 2)]
     yoy_data = yoy_data.drop(columns=columns_to_drop, axis=1)
     yoy_data = yoy_data.drop(yoy_data.columns[1], axis=1)
+
+    # payoff_count
+    response = sdk.run_look(str(302), "csv")
+    payoff_count = pd.read_csv(io.StringIO(response))
     
     with pd.ExcelWriter('/tmp/output.xlsx', engine='openpyxl') as writer:
         purchase_data.to_excel(writer, startrow=1, startcol=0, index = False)
@@ -248,12 +278,14 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
         weighted_data.to_excel(writer, startrow=109, startcol=0, index = False)
         week_delta_data.to_excel(writer, startrow=122, startcol=0, index = False)
         yoy_data.to_excel(writer, startrow=222, startcol=0, index = False)
+        payoff_count.to_excel(writer, startrow=322, startcol=0, index = False)
 
 
     ws_name = '/tmp/output.xlsx'
     file_path = '/tmp/output.xlsx'
     wb = openpyxl.load_workbook(file_path)
     ws = wb["Sheet1"]
+    ws.title = "Weekly (trend) | New Format"
     ws['A3'] = "US Month"
     ws.delete_rows(4, 2)
     ws.insert_rows(4)
@@ -299,14 +331,21 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     ws.delete_rows(165, 5)
     rows_to_modify = [2]
     modify_excel_cells(ws, rows_to_modify)
-    multiply_and_format(ws, row_numbers=[20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 39, 43 ,74, 75, 76, 77], num=100)
-    multiply_and_format(ws, row_numbers=[35], num=10000)
+    multiply_and_format(ws, row_numbers=[20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 39, 43 ,74, 75, 76, 77], num=100)
     apply_dollar_format(ws, row_numbers=[6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 47, 55 ,56, 57, 58 ,61, 82, 84])
     apply_bold_to_cells(ws, row_numbers=[3, 4, 19, 28, 38, 42, 46, 54, 73], columns=[1])
     apply_bold_to_cells(ws, row_numbers=[81], columns=[i for i in range(1, 53)])
     row_nums = [i for i in range(4, 86)]
     align(ws, row_numbers=row_nums, format="right")
     align(ws, row_numbers=[3], format="center")
+    auto_adjust_column_width(ws)
+    ws.freeze_panes = "B4" 
+    ws.insert_rows(69)
+    ws.insert_rows(18)
+    move_rows(range(266, 267), range(18, 19), ws, 1)
+    ws.delete_rows(262, 7)
+    align(ws, row_numbers=[18], format="right")
+    ws.insert_rows(19)
     wb.save(ws_name)
     
     response = sdk.run_look(str(264), "png", image_width=700, image_height=300)
@@ -332,7 +371,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     insert_image(sdk, ws, look_id=278, file_name="view_9.png", anchor_cell="B55")
     insert_image(sdk, ws, look_id=277, file_name="view_10.png", anchor_cell="M55")
     insert_image(sdk, ws, look_id=276, file_name="view_11.png", anchor_cell="X55")
-    # insert_image(sdk, ws, look_id=284, file_name="view_12.png", anchor_cell="AI55")
+    insert_image(sdk, ws, look_id=284, file_name="view_12.png", anchor_cell="AI55")
     insert_image(sdk, ws, look_id=266, file_name="view_13.png", anchor_cell="B80")
     insert_image(sdk, ws, look_id=267, file_name="view_14.png", anchor_cell="M80")
     insert_image(sdk, ws, look_id=265, file_name="view_15.png", anchor_cell="X80")
@@ -356,6 +395,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     
 
     set_cell_value(ws, 'AL3', 'WAC - Bridge', font_size=18, bold=True)
+    set_cell_value(ws, 'AL53', 'Originator Spread (ex Merchants)', font_size=18, bold=True)
 
     set_cell_value(ws, 'AW3', 'Payoff Volume', font_size=18, bold=True)
     
