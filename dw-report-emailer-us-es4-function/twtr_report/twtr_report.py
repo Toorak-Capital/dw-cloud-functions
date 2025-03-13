@@ -285,6 +285,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     file_path = '/tmp/output.xlsx'
     wb = openpyxl.load_workbook(file_path)
     ws = wb["Sheet1"]
+    ws.title = "Weekly (trend) | New Format"
     ws['A3'] = "US Month"
     ws.delete_rows(4, 2)
     ws.insert_rows(4)
