@@ -31,6 +31,32 @@ def move_rows(source_range, target_range, ws, clear):
             for col in range(1, ws.max_column + 1):
                 ws.cell(row=row, column=col, value="")
 
+def auto_adjust_column_width(ws):
+    """
+    Adjusts the width of all columns, setting a fixed width for the first column
+    and adjusting the rest based on the data they contain.
+    """
+    # Set a fixed width for Column A (adjust the value as needed)
+    ws.column_dimensions['A'].width = 25  # You can change 25 to any fixed width you prefer
+
+    for col in ws.columns:
+        max_length = 0
+        col_letter = get_column_letter(col[0].column)
+
+        # Skip Column A since its width is already fixed
+        if col_letter == 'A':
+            continue
+
+        for cell in col:
+            try:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+        
+        ws.column_dimensions[col_letter].width = max_length + 2
+
+
 
 def modify_excel_cells(ws, rows_to_modify):
     for row in rows_to_modify:
@@ -307,6 +333,8 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     row_nums = [i for i in range(4, 86)]
     align(ws, row_numbers=row_nums, format="right")
     align(ws, row_numbers=[3], format="center")
+    auto_adjust_column_width(ws)
+    ws.freeze_panes = "B4" 
     wb.save(ws_name)
     
     response = sdk.run_look(str(264), "png", image_width=700, image_height=300)
@@ -332,7 +360,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     insert_image(sdk, ws, look_id=278, file_name="view_9.png", anchor_cell="B55")
     insert_image(sdk, ws, look_id=277, file_name="view_10.png", anchor_cell="M55")
     insert_image(sdk, ws, look_id=276, file_name="view_11.png", anchor_cell="X55")
-    # insert_image(sdk, ws, look_id=284, file_name="view_12.png", anchor_cell="AI55")
+    insert_image(sdk, ws, look_id=284, file_name="view_12.png", anchor_cell="AI55")
     insert_image(sdk, ws, look_id=266, file_name="view_13.png", anchor_cell="B80")
     insert_image(sdk, ws, look_id=267, file_name="view_14.png", anchor_cell="M80")
     insert_image(sdk, ws, look_id=265, file_name="view_15.png", anchor_cell="X80")
@@ -356,6 +384,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     
 
     set_cell_value(ws, 'AL3', 'WAC - Bridge', font_size=18, bold=True)
+    set_cell_value(ws, 'AL53', 'Originator Spread (ex Merchants)', font_size=18, bold=True)
 
     set_cell_value(ws, 'AW3', 'Payoff Volume', font_size=18, bold=True)
     
