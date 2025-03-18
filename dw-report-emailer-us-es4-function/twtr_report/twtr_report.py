@@ -266,7 +266,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     response = sdk.run_look(str(302), "csv")
     payoff_count = pd.read_csv(io.StringIO(response))
     
-    with pd.ExcelWriter('output_data.xlsx', engine='openpyxl') as writer:
+    with pd.ExcelWriter('/tmp/output.xlsx', engine='openpyxl') as writer:
         purchase_data.to_excel(writer, startrow=1, startcol=0, index = False)
         ga_count.to_excel(writer, startrow=22, startcol=0, index = False)
         payoffs_data.to_excel(writer, startrow=29, startcol=0, index = False)
@@ -282,8 +282,8 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
         payoff_count.to_excel(writer, startrow=322, startcol=0, index = False)
 
 
-    ws_name = 'output_data.xlsx'
-    file_path = 'output_data.xlsx'
+    ws_name = '/tmp/output.xlsx'
+    file_path = '/tmp/output.xlsx'
     wb = openpyxl.load_workbook(file_path)
     ws = wb["Sheet1"]
     ws.title = "Weekly (trend) | New Format"
@@ -352,8 +352,8 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     response = sdk.run_look(str(264), "png", image_width=700, image_height=300)
     image = Image.open(io.BytesIO(response))
     image.save('view_1.png')
-    ws_name = 'output_data.xlsx'
-    file_path = 'output_data.xlsx'
+    ws_name = '/tmp/output.xlsx'
+    file_path = '/tmp/output.xlsx'
     wb = openpyxl.load_workbook(file_path)
     wb.create_sheet("Trended Charts",1)
     ws = wb["Trended Charts"]
