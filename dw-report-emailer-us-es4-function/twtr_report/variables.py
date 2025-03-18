@@ -25,12 +25,12 @@ if env == 'prod':
                              {"email":'mpinnamaneni@toorakcapital.com',"name":"Mounika"},
                              {"email":'vijaylaxmi@triconinfotech.com',"name":"Laxmi"}]
     
-    twtr_email_cc = [{"email":'hsharma@toorakcapital.com',"name":"Data Team"}]
+    twtr_email_cc = [{"email":'ToorakDataTeam@triconinfotech.com',"name":"Data Team"}]
     
 else:
     
-    twtr_email_recipients = [{"email":'hsharma@toorakcapital.com',"name":"Eric"}]
-    
-    twtr_email_cc = [{"email":'mpinnamaneni@toorakcapital.com',"name":"Mounika"},
+    twtr_email_recipients = [{"email":'mpinnamaneni@toorakcapital.com',"name":"Mounika"},
                     {"email":'vijaylaxmi@triconinfotech.com',"name":"Laxmi"}]
+    
+    twtr_email_cc = [{"email":'ToorakDataTeam@triconinfotech.com',"name":"Data Team"}]
     
