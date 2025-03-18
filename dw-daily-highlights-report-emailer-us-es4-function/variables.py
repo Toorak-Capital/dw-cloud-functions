@@ -25,7 +25,8 @@ if env == 'prod':
                         {"email":'sgoldman@toorakcapital.com',"name":"Scott Goldman"},
                         {"email":'cmacintosh@toorakcapital.com',"name":"Macintosh"},
                         {"email":'lberger@toorakcapital.com',"name":"Lincoln Berger"},
-                        {"email":'cschollmeyer@toorakcapital.com',"name":"Caryn Schollmeyer"}]
+                        {"email":'cschollmeyer@toorakcapital.com',"name":"Caryn Schollmeyer"},
+                        {"email":'kchen@toorakcapital.com',"name":"Kathy Chen"}]
     
     email_recipients_cc = [{"email":'toorakdatateam@triconinfotech.com',"name":"Data Team"}]
     
