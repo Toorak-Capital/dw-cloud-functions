@@ -95,3 +95,8 @@ def trigger_on_securitization_report(file_path, file_uri):
     targeted_rate = read_excel(file_uri, sheet_name = 'Targeted Rate')
     write_parquet_file(targeted_rate, 'AM-Securitization/targeted_rate', formatted_date)
 
+    #trigger rate date
+    trigger_rate = pd.read_excel(file_uri, sheet_name='Trigger Data')
+    trigger_rate = trigger_rate.rename({'Rev. Per End Date' : 'Rev Per End Date'}, axis = 1)
+    write_parquet_file(targeted_rate, 'AM-Securitization/trigger_rate', formatted_date)
+
