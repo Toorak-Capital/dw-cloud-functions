@@ -68,7 +68,20 @@ def modify_excel_cells(ws, rows_to_modify):
                 cell.value = new_value
 
 
+def remove_bold_from_cells(ws, row_numbers, columns):
+    """
+    Applies bold formatting to specific cells in given rows and columns.
 
+    Parameters:
+    - ws: The worksheet object
+    - row_numbers: A list of row numbers to process
+    - columns: A list of column numbers to apply bold formatting
+    """
+
+    for row_number in row_numbers:
+        for col in columns:
+            cell = ws.cell(row=row_number, column=col)
+            cell.font = Font(bold=False)  # Apply bold formatting
 
 def multiply_and_format(ws, row_numbers, num, start_col=2, end_col=53):
     """
@@ -347,6 +360,14 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     ws.delete_rows(257, 7)
     align(ws, row_numbers=[18], format="right")
     ws.insert_rows(19)
+    remove_bold_from_cells(ws, row_numbers=[2], columns=[i for i in range(1, 55)])
+    remove_bold_from_cells(ws, row_numbers=[84], columns=[i for i in range(2, 55)])
+    apply_bold_to_cells(ws, row_numbers=[3, 5, 14], columns=[i for i in range(1, 55)])
+    ws['A15'] = 'Loan Count' #blue
+    ws.insert_rows(1)
+    ws.insert_rows(1)
+    ws.insert_rows(39)
+    ws.insert_rows(6)
     wb.save(ws_name)
     
     response = sdk.run_look(str(264), "png", image_width=700, image_height=300)
