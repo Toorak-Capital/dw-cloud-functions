@@ -165,7 +165,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
         return {
             'statusCode': status_code,
             'body': json.dumps(response_body)
-        }
+    }
 
     file_types = ['tape','payoff','transaction','toorak_agg']
     if not any(file_type in file_name for file_type in file_types):
@@ -174,7 +174,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
         return {
             'statusCode': status_code,
             'body': json.dumps(response_body)
-        }
+    }
 
     is_transaction_file = False
     sheet_name =''
