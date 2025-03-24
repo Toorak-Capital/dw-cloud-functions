@@ -160,6 +160,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
     }
     warehouselines = ['ms','db','jpm','bawag','churchill','axos','equity','transaction','toorak_agg','toorak']
     if not any(warehouseline in file_name for warehouseline in warehouselines):
+        response_body = 'not an expected warehouseline'
         print(response_body)
         return {
             'statusCode': status_code,
@@ -168,6 +169,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
 
     file_types = ['tape','payoff','transaction','toorak_agg']
     if not any(file_type in file_name for file_type in file_types):
+        response_body = 'not an expected file type'
         print(response_body)
         return {
             'statusCode': status_code,
