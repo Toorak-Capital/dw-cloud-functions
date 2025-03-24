@@ -20,6 +20,7 @@ import jinja2
 import datetime as dt
 from variables import *
 from merchants_emailer.merchants_emailer import *
+from twtr_report.twtr_report import *
 from uk_emailer.uk_emailer import *
 from diligence_emailer.diligence_emailer import *
 from risk_score_emailer.risk_score_emailer import *
@@ -157,6 +158,10 @@ def lambda_handler(request):
         if request_json['report'] == 'merchant_weekly':
             file_name = f'{email_type} Merchants Weekly Report - {date_for_mail}'.lstrip()
             response = merchant_weekly_report(file_name, sdk, email_api, bucket, get_bucket)
+
+        elif request_json['report'] == 'twtr_report':
+            file_name = f'{email_type} Toorak Weekly Trend Report - {date_for_mail}'.lstrip()
+            response = twtr_report(file_name, sdk, email_api, bucket, get_bucket)
             
         elif request_json['report'] == 'uk_weekly':
             file_name = f'{email_type} UK Weekly Report - {date_for_mail}'.lstrip()
