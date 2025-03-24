@@ -43,6 +43,7 @@ def write_parquet_file(df, folderName, source, formatted_date):
     parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
     if folderName in special_case:
         df = df.astype(str)
+        # df.replace("None", np.nan, inplace=True)
         df.to_parquet(f"gs://{destination_bucket}/{source}/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
     else:
         df.to_parquet(f"gs://{destination_bucket}/{source}/to-process-v2/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
