@@ -197,7 +197,6 @@ def pst_file_prep(sdk, user_client, pst_look_ids, pst_comparator_look_id, pst_co
     logging.info('inside pst prep')
     tmp_file = '/tmp/report.xlsx'
     pst_all_loans = run_look_and_clean_df(sdk, pst_look_ids['pst_all_loans'],'Payment Status Tracker')
-    pst_all_loans = pst_all_loans[[['Loan Number', 'Servicer Loan Number', 'Product Type', 'FNF Loan Type', 'Originator', 'Property Address', 'City', 'State', 'Zip Code', 'Servicer', 'Trade Date', 'Trade Finance Buyer', 'First Pay Date', 'UPB Actual Ending', 'Maturity Date', 'Loan Status', 'Next Payment Date', 'UPB', 'UnappliedBalance', 'Property Type', 'Last Payment Date', 'Principal & Interest', 'Taxes and Insurance', 'Total Principal,Interest, Taxes and Insurance', 'REO (Yes/No)', 'Loan Comments Added Date', 'Loan Comments', 'Legal Comments Added Date', 'Legal Comments', 'MBA', 'OTS', 'Product', '# of payments down (MBA)', '60+', 'Asset Manager', 'Servicer UPB', 'Breezeway Status', 'Servicer Paid Off Date', 'Original Maturity Date', 'Toorak Loan ID', 'Assigned Partner', 'Original Interest Reserve', 'Borrower Name', 'Borrower Entity', 'Guarantor Name']]]
     all_loans_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_summary'],'Pst Summary')
     bridge_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_bridge_summary'], 'Pst Bridge Summary')
     dscr_summary = run_look_and_clean_df(sdk, pst_look_ids['pst_dscr_summary'],'Pst Dscr Summary')
