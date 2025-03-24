@@ -30,8 +30,7 @@ def write_parquet_file(df, folderName, formatted_date):
     if df.empty or len(df.columns) == 0:
         print('File is empty. No further action taken.')
         raise Exception('File is empty. No further action taken.')
-    '''
-    '''
+
     else:
         parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
         df.to_parquet(f"gs://{destination_bucket}/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
