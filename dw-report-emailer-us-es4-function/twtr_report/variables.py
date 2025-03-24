@@ -19,6 +19,7 @@ sender_email = {"name":"noreply@toorakcapital.com","email":"noreply@toorakcapita
 if env == 'prod':
     
     twtr_email_recipients = [{"email":'edyner@toorakcapital.com',"name":"Eric"},
+                             {"email":'kchen@toorakcapital.com',"name":"Chen"},
                              {"email":'svenugopal@toorakcapital.com',"name":"Sachin"},
                              {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
                              {"email":'kgood@toorakcapital.com',"name":"Kyle"},
