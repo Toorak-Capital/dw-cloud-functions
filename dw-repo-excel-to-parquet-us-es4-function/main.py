@@ -131,6 +131,10 @@ def folder_has_files(gcs_path):
     # print(f"❌ No files found in {gcs_path}")
     return False
 
+def create_response(message, status_code=200):
+    print(message)
+    return {'statusCode': status_code, 'body': json.dumps(message)}
+
 def trigger_on_repo_file_upload(cloudevent, context):
     '''
     '''
@@ -150,32 +154,19 @@ def trigger_on_repo_file_upload(cloudevent, context):
     file_path = file_path.replace('projects/_/buckets/','').replace('objects/','')
     file_name = file_name.lower()
 
+
     status_code = 200
     if '.xlsx' not in file_name:
-        response_body = 'not an excel file'
-        print(response_body)
-        return {
-        'statusCode': 200,
-        'body': json.dumps(response_body)
-    }
+        return create_response('not an excel file')
+    
     warehouselines = ['ms','db','jpm','bawag','churchill','axos','equity','transaction','toorak_agg','toorak']
-    if not any(warehouseline in file_name for warehouseline in warehouselines):
-        response_body = 'not an expected warehouseline'
-        print(response_body)
-        return {
-            'statusCode': status_code,
-            'body': json.dumps(response_body)
-    }
-
+    if all(warehouseline not in file_name for warehouseline in warehouselines):
+        return create_response('not an expected warehouseline')
+    
     file_types = ['tape','payoff','transaction','toorak_agg']
-    if not any(file_type in file_name for file_type in file_types):
-        response_body = 'not an expected file type'
-        print(response_body)
-        return {
-            'statusCode': status_code,
-            'body': json.dumps(response_body)
-    }
-
+    if all(file_type not in file_name for file_type in file_types):
+        return create_response('not an expected file type')
+    
     is_transaction_file = False
     sheet_name =''
     if 'ms' in file_name:
@@ -205,12 +196,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
     elif 'toorak_agg' in file_name:
         is_monthly_paydown_file = True
     else:
-        response_body = 'incorrect format or corrupted data'
-        print(response_body)
-        return {
-        'statusCode': 200,
-        'body': json.dumps(response_body)
-    }
+        return create_response('incorrect format or corrupted data')
     status_code = 200
     is_payoff = True if 'payoff' in file_name else False
 
@@ -219,7 +205,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
         transaction_df,file_date = get_sheet_data(file_path,type='transaction')
         if not transaction_df.empty and len(transaction_df.columns) != 0:
             write_parquet_file(transaction_df,file_date,'',type='transaction')
-        
+
     elif 'toorak_agg' in file_name:
         monthly_paydown_df,file_date = get_sheet_data(file_path,type='toorak_agg')
         if not monthly_paydown_df.empty and len(monthly_paydown_df.columns) != 0:
@@ -238,7 +224,7 @@ def trigger_on_repo_file_upload(cloudevent, context):
             payoff_df['created_at'] = datetime.utcnow()
             if not payoff_df.empty and len(payoff_df.columns) != 0:
                 write_parquet_file(payoff_df, file_date,warehouseline,type='payoff')
-                
+
     return {
         'statusCode': status_code,
         'body': json.dumps(response_body)
