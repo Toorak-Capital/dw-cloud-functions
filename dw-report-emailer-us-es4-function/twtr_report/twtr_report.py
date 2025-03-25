@@ -151,7 +151,7 @@ def apply_bold_to_cells(ws, row_numbers, columns):
             cell.font = Font(bold=True)  # Apply bold formatting
 
 
-def insert_image(sdk, ws, look_id, file_name, anchor_cell, width=700, height=300):
+def insert_image(sdk, ws, look_id, file_name, anchor_cell, width=700, height=450):
     """
     Inserts an image into the given worksheet at a specified location.
 
@@ -161,7 +161,7 @@ def insert_image(sdk, ws, look_id, file_name, anchor_cell, width=700, height=300
     - file_name: The name to save the image as (e.g., 'view_10.png').
     - anchor_cell: The Excel cell where the image should be placed.
     - width: Image width (default: 700).
-    - height: Image height (default: 300).
+    - height: Image height (default: 450).
     """
 
     # Get image from Looker
@@ -370,7 +370,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     ws.insert_rows(6)
     wb.save(ws_name)
     
-    response = sdk.run_look(str(264), "png", image_width=700, image_height=300)
+    response = sdk.run_look(str(264), "png", image_width=700, image_height=450)
     image = Image.open(io.BytesIO(response))
     image.save('view_1.png')
     ws_name = '/tmp/output.xlsx'
