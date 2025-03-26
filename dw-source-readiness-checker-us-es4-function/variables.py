@@ -22,8 +22,8 @@ monthly_files_bucket_folders_dest_18th = [
         ]
 
 
-rsd_bucket_folder_pairs_dest = [{'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Extension Tracker', 0)},
-        {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Report/', 0)},
+rsd_bucket_folder_pairs_dest = [{'RSD_Master Extension Tracker': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/Master Extension Tracker', 0)},
+        {'RSD_Master Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/Master Report/', 0)},
         {'RSD_Master RSD Report': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master RSD Report', 0)},
         {'RSD_Master Special Servicing Weekly': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'rsd/to-process-v2/Master Special Servicing Weekly', 0)}
         ]
@@ -43,10 +43,14 @@ bucket_folder_pairs_dest = [
         {'FCI_loan_portfolio_information': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'fci/to-process-v2/loan_portfolio_information', 0)},
         {'BSI-Merchants': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI-Merchants/to-process-v2/Status', 0)},
         {'BZ': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/to-process-v2', 0)},
+        {'BZ_draw': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'breezeway/Draws', 0)},
         {'CSL': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'csl/to-process-v2/CSL_Running_Balances', 0)},
         # {'Lending_Home': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'lending-home/to-process-v2/lendinghome', 0)},
         # {'Lima': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'lima/to-process-v2/lima', 0)},
-        {'BSI_Toorak_EscrowFPI': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI/to-process-v2/Toorak_EscrowFPI', 0)}
+        {'BSI_Toorak_EscrowFPI': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'BSI/to-process-v2/Toorak_EscrowFPI', 0)},
+        {'Shellpoint_Toorak_Foreclosure': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Shellpoint/Toorak_Foreclosure', 0)},
+        {'Shellpoint_Toorak_Bankruptcy': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Shellpoint/Toorak_Bankruptcy', 0)},
+        {'Shellpoint_Toorak_LossMitigation': (f'dw-{env}-bronze-purchased-loan-us-es4-gcs', 'Shellpoint/Toorak_LossMitigation', 0)},
         ]
 
 if env == 'prod':
