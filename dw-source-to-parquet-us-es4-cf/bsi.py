@@ -49,7 +49,8 @@ def get_folder_name(input_string, folder_regex_pattern):
 
 
 def trigger_on_bsi_upload(file_path, file_uri):
-    date_string = extract_date(file_path)
+    file_path_new = file_path.split('/')[-1]
+    date_string = extract_date(file_path_new)
     data_date_format = datetime.strptime(date_string, "%Y%m%d").date().strftime("%m/%d/%Y")
     formatted_date = datetime.strptime(date_string, "%Y%m%d").date().strftime("%Y-%m-%d")
     folder_regex_pattern = r'\d{8}_(\w+)\.csv'
