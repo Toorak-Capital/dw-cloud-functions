@@ -1,0 +1,13 @@
+functions-framework==3.*
+looker_sdk
+pandas
+numpy
+openpyxl
+requests
+gcsfs
+fsspec
+google-cloud-storage
+google-cloud-logging
+pyarrow
+fastparquet
+xlrd
