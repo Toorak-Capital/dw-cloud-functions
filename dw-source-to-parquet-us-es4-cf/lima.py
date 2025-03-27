@@ -22,11 +22,11 @@ def extract_date(input_string):
         # Format the date
         formatted_date = f"{year}-{month}-{day}"
         return formatted_date
-        
+
     elif match2:
-        month = match.group(1)
-        day = match.group(2)
-        year = match.group(3)
+        month = match2.group(1)
+        day = match2.group(2)
+        year = match2.group(3)
         
         # Format the date
         formatted_date = f"{year}-{month}-{day}"
