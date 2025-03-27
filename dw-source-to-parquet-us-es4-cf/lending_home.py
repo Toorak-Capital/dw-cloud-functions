@@ -6,9 +6,12 @@ from main import *
 def extract_date(input_string):
     # Regular expression pattern to match digits
     pattern = r"\b(\d{2}) (\d{2}) (\d{4})\.xlsx"
+    pattern2 = r"\b(\d{2}).(\d{2}).(\d{4})\.xlsx"
     
     # Search for the first occurrence of digits in the input string
     match = re.search(pattern, input_string)
+
+    match2 = re.search(pattern2, input_string)
     
     # Check if a match is found
     if match:
@@ -19,7 +22,16 @@ def extract_date(input_string):
         # Format the date
         formatted_date = f"{year}-{month}-{day}"
         return formatted_date
-    else:
+
+    elif match2:
+        month = match2.group(1)
+        day = match2.group(2)
+        year = match2.group(3)
+        
+        # Format the date
+        formatted_date = f"{year}-{month}-{day}"
+        return formatted_date
+    else :
         return None
     
 
