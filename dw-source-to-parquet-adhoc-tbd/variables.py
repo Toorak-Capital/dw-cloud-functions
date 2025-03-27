@@ -38,14 +38,9 @@ def read_excel(location, sheet_name = ''):
 def write_parquet_file(df, folderName, source, formatted_date):
     '''
     '''
-    # special_case = ['Toorak_Foreclosure', 'Toorak_Bankruptcy', 'Toorak_LossMitigation', 'Draws', 'Master Report', 'Master Extension Tracker']
-    special_case = ['fci']
-    parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-    if source in special_case:
-        df.to_parquet(f"gs://{destination_bucket}/{source}/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-    else:
-        df = df.astype(pd.StringDtype())
-        df.to_parquet(f"gs://{destination_bucket}/{source}/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
+    parquet_unique_id = f'part-00000-{formatted_date}'
+    df = df.astype(pd.StringDtype())
+    df.to_parquet(f"gs://{destination_bucket}/{source}/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
 
 
 def write_parquet_by_date(df, source, folder_name, formatted_date):
