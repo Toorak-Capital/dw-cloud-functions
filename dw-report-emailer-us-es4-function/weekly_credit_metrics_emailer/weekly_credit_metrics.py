@@ -212,7 +212,7 @@ def update_percentage_values(ws, row_numbers, col_names, both):
                 try:
                     # Convert to number, remove percent sign, multiply by 100
                     if both == True:
-                        cell.value = float(cell.value.strip('%')) * 100
+                        cell.value = float(cell.value.strip('%'))
                     else:
                         cell.value = f'{float(cell.value.strip("%")) * 100}%'
                 except ValueError:
