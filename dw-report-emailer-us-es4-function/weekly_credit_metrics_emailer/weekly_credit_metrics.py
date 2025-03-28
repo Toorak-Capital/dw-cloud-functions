@@ -197,6 +197,29 @@ def delete_rows(ws, rows_to_delete):
         ws.delete_rows(row)
 
 
+def update_percentage_values(ws, row_numbers, col_names, both):
+    """
+    Removes the percent sign and multiplies the values by 100 for the given rows and columns in an openpyxl worksheet.
+
+    :param ws: openpyxl worksheet object
+    :param row_numbers: List of row numbers (1-based index)
+    :param col_names: List of column names (Excel-style, e.g., 'A', 'B')
+    """
+    for row in row_numbers:
+        for col_name in col_names:
+            cell = ws[f"{col_name}{row}"]
+            if isinstance(cell.value, str) and cell.value.endswith('%'):
+                try:
+                    # Convert to number, remove percent sign, multiply by 100
+                    if both == True:
+                        cell.value = float(cell.value.strip('%'))
+                    else:
+                        cell.value = f'{float(cell.value.strip("%")) * 100}%'
+                except ValueError:
+                    print(f"Skipping invalid value in {col_name}{row}: {cell.value}")
+        
+
+
 def merge_entire_row(ws, row_numbers, value_col=2):
     """
     Merges all columns in specific rows while keeping a value in Column B.
@@ -359,6 +382,8 @@ def weekly_credit_metrics_report(file_name, sdk, email_api, bucket, get_bucket):
     merge_and_border_preserve_text(ws, [('C2', 'I2'), ('J2', 'P2'), ('Q2', 'W2'), ('C13', 'I13'), ('J13', 'P13'), ('Q13', 'W13'), ('C24', 'L24'), ('M24', 'V24'), ('W24', 'AF24')])
     wb.save(ws_name)
     set_cell_value(ws, 'B2', 'SFR 1-4 (no GUC)', font_size=12, bold=False)
+    update_percentage_values(ws, [5,6,7,8,9,10], ['H', 'O', 'V'], True)
+    update_percentage_values(ws, [5,6,7,8,9,10], ['I', 'P', 'W'], False)
     wb.save(ws_name)
 
     with open(file_path, 'rb') as f:
