@@ -103,7 +103,7 @@ def query_bigquery():
     for row in results:
         date = row['run_finished_time'].date()
         print(date)
-        if date == datetime.now().date():
+        if date:
             result = True
     return result
 
