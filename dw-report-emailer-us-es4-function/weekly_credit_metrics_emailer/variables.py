@@ -6,7 +6,8 @@ sender_email = {"name":"noreply@toorakcapital.com","email":"noreply@toorakcapita
 
 if env == 'prod':
 
-    cm_email_recipients = [{"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
+    cm_email_recipients = [{"email":"lberger@toorakcapital.com","name":"lberger"},
+                            {"email":'jkuppuswamy@toorakcapital.com',"name":"Jaya"},
                              {"email":'kgood@toorakcapital.com',"name":"Kyle"},
                              {"email":'mpinnamaneni@toorakcapital.com',"name":"Mounika"},
                              {"email":'vijaylaxmi@triconinfotech.com',"name":"Laxmi"}]
