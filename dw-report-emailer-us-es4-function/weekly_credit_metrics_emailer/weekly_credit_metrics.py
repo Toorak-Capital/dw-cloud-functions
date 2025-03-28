@@ -382,8 +382,8 @@ def weekly_credit_metrics_report(file_name, sdk, email_api, bucket, get_bucket):
     merge_and_border_preserve_text(ws, [('C2', 'I2'), ('J2', 'P2'), ('Q2', 'W2'), ('C13', 'I13'), ('J13', 'P13'), ('Q13', 'W13'), ('C24', 'L24'), ('M24', 'V24'), ('W24', 'AF24')])
     wb.save(ws_name)
     set_cell_value(ws, 'B2', 'SFR 1-4 (no GUC)', font_size=12, bold=False)
-    update_percentage_values(ws, [5,6,7,8,9,10], ['H', 'O', 'V'], True)
-    update_percentage_values(ws, [5,6,7,8,9,10], ['I', 'P', 'W'], False)
+    update_percentage_values(ws, [4,5,6,7,8,9], ['H', 'O', 'V'], True)
+    update_percentage_values(ws, [4,5,6,7,8,9], ['I', 'P', 'W'], False)
     wb.save(ws_name)
 
     with open(file_path, 'rb') as f:
