@@ -380,10 +380,6 @@ def weekly_credit_metrics_report(file_name, sdk, email_api, bucket, get_bucket):
             </head>
             <body>
             <br>Hi All,<br><br>Please find attached report name.<br>Please let us know if you face any issues.
-            <ul>
-                <li><a href="https://toorakcapital.cloud.looker.com/dashboards/495">Looker Report</a></li>
-                <li><a href="https://toorakcapital.cloud.looker.com/dashboards/496">Looker Report Charts</a></li>
-            </ul>
             <br><br>Thanks,<br>Toorak.<br>
             <img src='https://static.wixstatic.com/media/74c4f9_20406c39aa61491d83b0ccec086c6feb~mv2_d_4500_4500_s_4_2.png/v1/fit/w_1000%2Ch_1000%2Cal_c/file.png' width="250" height="190">
             </body>
