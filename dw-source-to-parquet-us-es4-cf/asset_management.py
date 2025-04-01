@@ -38,8 +38,9 @@ def write_parquet_file(df, folderName, formatted_date):
 
 
 def trigger_on_am_report(file_path, file_uri):
+    '''
+    '''
     formatted_date = extract_date(file_path)
-    
     
     df = read_excel(file_uri, sheet_name = 'Toorak Master List_Bridge')
     write_parquet_file(df, 'originator_am_mapping', formatted_date)
@@ -98,4 +99,3 @@ def trigger_on_securitization_report(file_path, file_uri):
     trigger_rate = pd.read_excel(file_uri, sheet_name='Trigger Data')
     trigger_rate = trigger_rate.rename({'Rev. Per End Date' : 'Rev Per End Date'}, axis = 1)
     write_parquet_file(targeted_rate, 'AM-Securitization/trigger_rate', formatted_date)
-

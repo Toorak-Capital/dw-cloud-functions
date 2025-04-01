@@ -30,7 +30,6 @@ def rename_columns(df):
 
 
 def trigger_on_bsi_merchants_upload(file_path, file_uri):
-        data_date_format = datetime.now().strftime("%d/%m/%Y")
         df = read_excel(file_uri)
         df = df.filter(regex= '^[#$!@%&\w]')
         df = rename_columns(df)
@@ -39,7 +38,6 @@ def trigger_on_bsi_merchants_upload(file_path, file_uri):
             response_body = 'File is empty. No further action taken.'
             status_code = 200
         else:
-            df['data_date'] = data_date_format
             ingestion_date = extract_date(file_path)
             formatted_date = datetime.strptime(ingestion_date, "%Y%m%d").date().strftime("%Y-%m-%d")
             write_parquet_file(df, 'Status', 'BSI-Merchants', formatted_date)
