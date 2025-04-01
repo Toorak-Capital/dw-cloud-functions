@@ -353,7 +353,7 @@ def twtr_report(file_name, sdk, email_api, bucket, get_bucket):
     align(ws, row_numbers=row_nums, format="right")
     align(ws, row_numbers=[3], format="center")
     auto_adjust_column_width(ws)
-    ws.freeze_panes = "B4" 
+    ws.freeze_panes = "B6" 
     ws.insert_rows(69)
     ws.insert_rows(18)
     move_rows(range(261, 262), range(18, 19), ws, 1)

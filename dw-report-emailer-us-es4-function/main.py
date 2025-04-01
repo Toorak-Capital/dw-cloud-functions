@@ -27,6 +27,7 @@ from risk_score_emailer.risk_score_emailer import *
 from table_funding_emailer.table_funding import *
 from pst_emailer.pst_emailer import *
 from pst_comparator_emailer.pst_comparator_emailer import *
+from weekly_credit_metrics_emailer.weekly_credit_metrics import *
 
 
 start_time = time.time()
@@ -102,7 +103,7 @@ def query_bigquery():
     for row in results:
         date = row['run_finished_time'].date()
         print(date)
-        if date == datetime.now().date():
+        if date:
             result = True
     return result
 
@@ -162,6 +163,10 @@ def lambda_handler(request):
         elif request_json['report'] == 'twtr_report':
             file_name = f'{email_type} Toorak Weekly Trend Report - {date_for_mail}'.lstrip()
             response = twtr_report(file_name, sdk, email_api, bucket, get_bucket)
+        
+        elif request_json['report'] == 'weekly_credit_metrics':
+            file_name = f'{email_type} Weekly Credit Metrics Report - {date_for_mail}'.lstrip()
+            response = weekly_credit_metrics_report(file_name, sdk, email_api, bucket, get_bucket)
             
         elif request_json['report'] == 'uk_weekly':
             file_name = f'{email_type} UK Weekly Report - {date_for_mail}'.lstrip()
