@@ -94,11 +94,10 @@ def trigger_on_situs_upload(file_path, bucket_name):
             with z.open(file_in_zip) as f:
                 print('inside')
                 date_string = extract__date(file_path)
-                date_object = datetime.strptime(date_string, "%Y%m%d").date().strftime("%m/%d/%Y")
                 formatted_date = datetime.strptime(date_string, "%Y%m%d").date().strftime("%Y-%m-%d")
                 print(date_string)
+                
                 df = pd.read_csv(f, index_col=[0],dtype=str, on_bad_lines='skip')
-                df['data_date'] = date_object
                 df = df.replace('\n|\r', ' ', regex=True)
                 output_file_name = file_in_zip.replace("ByClient", "")
                 folder_name = get_folder_name(output_file_name)

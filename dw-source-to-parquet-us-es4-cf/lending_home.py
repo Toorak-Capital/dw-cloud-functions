@@ -61,8 +61,5 @@ def trigger_on_lending_home_upload(file_path, file_uri):
         print('File is empty. No further action taken.')
     else:
         ingestion_date = extract_date(file_path)
-        date_object = datetime.strptime(ingestion_date, "%Y-%m-%d").date().strftime("%m/%d/%Y")
-        df['data_date'] = date_object
-        print(date_object)
         write_parquet_file(df, 'lendinghome', 'lending-home' , ingestion_date)
         print('Successfully wrote the lendinghome Parquet file!')

@@ -23,8 +23,9 @@ def extract_date(input_string):
 
 
 def trigger_on_am_report(file_path, file_uri):
+    '''
+    '''
     formatted_date = extract_date(file_path)
-    
     
     df = read_excel(file_uri, sheet_name = 'Toorak Master List_Bridge')
     
@@ -33,8 +34,7 @@ def trigger_on_am_report(file_path, file_uri):
         raise Exception('File is empty. No further action taken.')
     
     else:
-
-        parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-        df.to_parquet(f"gs://{destination_bucket}/originator_am_mapping/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-
+        parent_folder = 'AM-Securitization'
+        sub_folder = 'originator_am_mapping'
+        write_parquet_file(df, sub_folder, parent_folder, formatted_date)
         print('Successfully wrote the AM Parquet file!')

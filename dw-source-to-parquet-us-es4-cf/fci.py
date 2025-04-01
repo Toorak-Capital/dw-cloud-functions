@@ -39,7 +39,6 @@ def trigger_on_fci_upload(file_path, file_uri, bucket_name):
     now = datetime.now()
     client = storage.Client()
     date_object = extract_date(file_path)
-    data_date_format = date_object.strftime("%m/%d/%Y")
     formatted_date = date_object.strftime("%Y-%m-%d")
     bucket = client.get_bucket(bucket_name)
     blob = bucket.blob(file_path)
@@ -60,11 +59,10 @@ def trigger_on_fci_upload(file_path, file_uri, bucket_name):
 
         df = pd.DataFrame(cleaned_data)
         df.replace('\n|\r|\t', ' ', regex=True, inplace=True)
-        df['data_date'] = data_date_format
-        file_folder = file_path.split('/')[-2]
-        parquet_unique_id = f'part-00000-{uuid.uuid4()}'
-        parquet_file_path = f"gs://{destination_bucket}/fci/to-process-v2/{file_folder}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet"
-        df.to_parquet(parquet_file_path, compression='snappy')
+
+        parent_folder = 'fci'
+        sub_folder = file_path.split('/')[-2]
+        write_parquet_file(df, sub_folder, parent_folder, formatted_date)
         print('Successfully wrote the Parquet file!')
         
         csv_buffer = df.to_csv(index=False)
@@ -99,8 +97,7 @@ def trigger_on_fci_excel_upload(file_uri):
         date_format = '%m.%d.%y'
         
     ingestion_date = extract_date_v2(file_uri,date_pattern_regex,date_format)
-    df['data_date'] = ingestion_date.strftime('%d/%m/%Y')
-    df['created_at'] = datetime.utcnow()
+    df['created_at'] = datetime.now()
     formatted_date = ingestion_date.date()
     write_parquet_file(df, sub_folder, parent_folder , formatted_date)
     print(f'Successfully wrote the fci {sub_folder} Parquet file!')

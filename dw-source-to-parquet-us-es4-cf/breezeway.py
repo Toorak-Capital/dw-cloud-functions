@@ -21,9 +21,7 @@ def get_folder_name(input_string, folder_regex_pattern):
 
 def trigger_on_breezeway_upload(file_path, file_uri):
     formatted_date = datetime.now().strftime("%Y-%m-%d")
-    data_date_format = datetime.now().strftime("%m/%d/%Y")
     folder_regex_pattern = r'dbo/([^/]+)/[^/]+\.csv'
     folder_name = get_folder_name(file_path, folder_regex_pattern)
     df = read_csv(file_uri)
-    df['data_date'] = data_date_format
     write_parquet_file(df, folder_name, 'breezeway', formatted_date)

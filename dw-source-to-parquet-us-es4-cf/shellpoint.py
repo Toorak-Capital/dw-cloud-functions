@@ -51,7 +51,6 @@ def get_folder_name(input_string):
 
 def trigger_on_shellpoint_upload(file_path, file_uri):
     date_string = extract_date(file_path)
-    date_object = datetime.strptime(date_string, "%Y%m%d").date().strftime("%m/%d/%Y")
     formatted_date = datetime.strptime(date_string, "%Y%m%d").date().strftime("%Y-%m-%d")
     print(file_path,"file_path")
     folderName = get_folder_name(file_path)
@@ -67,6 +66,5 @@ def trigger_on_shellpoint_upload(file_path, file_uri):
         print('File has less columns')
         raise Exception('File has less columns')
     else:
-        df['data_date'] = date_object
         write_parquet_file(df, folderName,'Shellpoint' ,formatted_date)
         print('Successfully wrote the Shellpoint Parquet file!')

@@ -25,7 +25,6 @@ def rename_columns(df):
 
 
 def trigger_on_toorak_servicer_report(file_path, file_uri):
-        data_date_format = datetime.now().strftime("%d/%m/%Y")
         df = read_excel(file_uri, sheet_name='Modifications')
         df = df.filter(regex= '^[#$!@%&\w]')
         df = rename_columns(df)
@@ -35,7 +34,6 @@ def trigger_on_toorak_servicer_report(file_path, file_uri):
             status_code = 200
             print(response_body)
         else:
-            # df['data_date'] = data_date_format
             ingestion_date = extract_date(file_path)
             formatted_date = datetime.strptime(ingestion_date, "%m.%d.%y").date().strftime("%Y-%m-%d")
             write_parquet_file(df, 'ToorakServicerReport', 'PostPurchaseLoanData', formatted_date)

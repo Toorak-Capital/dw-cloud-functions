@@ -32,7 +32,6 @@ def get_folder_name(file_path, folder_regex_pattern):
 
 
 def trigger_on_rsd_upload(file_path, file_uri):
-    data_date_format = datetime.now().strftime("%m/%d/%Y")
     folder_regex_pattern = r'([^/]+)\.xlsx$'
     folderName = get_folder_name(file_path, folder_regex_pattern)
     df = read_excel_rsd(file_uri)
@@ -43,7 +42,6 @@ def trigger_on_rsd_upload(file_path, file_uri):
     if df.empty or len(df.columns) == 0:
         response_body = 'File is empty. No further action taken.'
     else:
-        df['data_date'] = data_date_format
         ingestion_date = ''.join(file_path.split('/')[-2:-1])
 
         write_parquet_file(df, folderName,'rsd' ,ingestion_date)
