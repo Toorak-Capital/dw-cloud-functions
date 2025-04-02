@@ -172,7 +172,7 @@ def run_look_and_clean_df(sdk, look_id, col_name):
     
     row_limit = 7000
     response = sdk.run_look(look_id, "csv", limit = row_limit)
-    df = pd.read_csv(io.StringIO(response))
+    df = pd.read_csv(io.StringIO(response), dtype=str)
     df.columns = [col.replace('_', ' ') if col_name not in col else col.replace(f'{col_name} ','').strip() for col in df.columns]
     
     
