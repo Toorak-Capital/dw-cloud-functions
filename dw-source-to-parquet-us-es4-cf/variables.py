@@ -53,4 +53,5 @@ def write_parquet_by_date(df, source, folder_name, formatted_date):
     '''
     '''
     parquet_unique_id = f'part-00000-{formatted_date}'
+    df = df.astype(pd.StringDtype())
     df.to_parquet(f"gs://{destination_bucket}/{source}/to-process-v2/{folder_name}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
