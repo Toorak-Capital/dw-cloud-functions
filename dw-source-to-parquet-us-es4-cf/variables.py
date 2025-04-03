@@ -42,3 +42,10 @@ def write_parquet_file(df, sub_folder, parent_folder, formatted_date):
     df = df.astype(pd.StringDtype())
     df.to_parquet(f"gs://{destination_bucket}/{parent_folder}/{sub_folder}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
 
+
+def write_parquet_by_date(df, source, folder_name, formatted_date):
+    '''
+    '''
+    parquet_unique_id = f'part-00000-{formatted_date}'
+    df = df.astype(pd.StringDtype())
+    df.to_parquet(f"gs://{destination_bucket}/{source}/{folder_name}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
