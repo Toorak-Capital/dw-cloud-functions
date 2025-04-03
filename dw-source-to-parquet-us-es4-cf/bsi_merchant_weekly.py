@@ -135,7 +135,6 @@ def trigger_on_bsi_merchants_weekly_upload(file_path, file_uri):
             'body': json.dumps(error_message)
         }
     else:
-        df['data_date'] = datetime.strptime(formatted_date, '%Y-%m-%d').strftime('%d/%m/%Y')
         write_parquet_file(df, sub_folder_name, parent_folder_name, formatted_date)
         print('Successfully wrote %s Parquet file!'% sub_folder_name)
 

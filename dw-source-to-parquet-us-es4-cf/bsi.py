@@ -49,15 +49,17 @@ def get_folder_name(input_string, folder_regex_pattern):
 
 
 def trigger_on_bsi_upload(file_path, file_uri):
-    date_string = extract_date(file_path)
-    data_date_format = datetime.strptime(date_string, "%Y%m%d").date().strftime("%m/%d/%Y")
+    file_path_new = file_path.split('/')[-1]
+    date_string = extract_date(file_path_new)
     formatted_date = datetime.strptime(date_string, "%Y%m%d").date().strftime("%Y-%m-%d")
     folder_regex_pattern = r'\d{8}_(\w+)\.csv'
     folder_name = get_folder_name(file_path, folder_regex_pattern)
+    
     df = read_csv(file_uri)
     df = rename_columns(df)
     filtered_columns = [col for col in df.columns if not col.startswith('Unnamed')]
     df = df[filtered_columns]
+
     if df.empty or len(df.columns) == 0:
         print('File is empty. No further action taken.')
         raise Exception('File is empty. No further action taken.')
@@ -65,6 +67,5 @@ def trigger_on_bsi_upload(file_path, file_uri):
         print('File has less columns')
         raise Exception('File has less columns')
     else:
-        df['data_date'] = data_date_format
         write_parquet_file(df, folder_name, 'BSI',formatted_date)
         print('Successfully wrote the BSI Parquet file!')

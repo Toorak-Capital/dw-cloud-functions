@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import numpy as np
 import uuid
 import json
 from datetime import *
@@ -36,17 +35,12 @@ def read_excel(location, sheet_name = ''):
     return pd.read_excel(location, dtype=str)
 
 
-def write_parquet_file(df, folderName, source, formatted_date):
+def write_parquet_file(df, sub_folder, parent_folder, formatted_date):
     '''
     '''
-    special_case = ['Toorak_Foreclosure', 'Toorak_Bankruptcy', 'Toorak_LossMitigation', 'Draws', 'Master Report', 'Master Extension Tracker']
-    parquet_unique_id = 'part-00000-' + str(uuid.uuid4())
-    if folderName in special_case:
-        df = df.astype(pd.StringDtype())
-        # df.replace("None", np.nan, inplace=True)
-        df.to_parquet(f"gs://{destination_bucket}/{source}/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-    else:
-        df.to_parquet(f"gs://{destination_bucket}/{source}/to-process-v2/{folderName}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
+    parquet_unique_id = f'part-00000-{formatted_date}'
+    df = df.astype(pd.StringDtype())
+    df.to_parquet(f"gs://{destination_bucket}/{parent_folder}/{sub_folder}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
 
 
 def write_parquet_by_date(df, source, folder_name, formatted_date):
@@ -54,4 +48,4 @@ def write_parquet_by_date(df, source, folder_name, formatted_date):
     '''
     parquet_unique_id = f'part-00000-{formatted_date}'
     df = df.astype(pd.StringDtype())
-    df.to_parquet(f"gs://{destination_bucket}/{source}/to-process-v2/{folder_name}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
+    df.to_parquet(f"gs://{destination_bucket}/{source}/{folder_name}/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')

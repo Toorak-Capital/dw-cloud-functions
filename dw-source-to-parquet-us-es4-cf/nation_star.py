@@ -30,17 +30,22 @@ def rename_columns(df):
         return None
 
 def trigger_on_nation_star_upload(file_uri):
+    '''
+    '''
     normalised_file_url = file_uri.lower()
     if 'nationstar' not in normalised_file_url and 'remittance' not in normalised_file_url:
         return None
     df = pd.read_excel(file_uri,dtype=str, sheet_name='LOAN_LEVEL',skiprows=0)
     std_df = rename_columns(df)
+    
     # Check if DataFrame is empty
     if std_df.empty or len(std_df.columns) == 0:
         return None
     ingestion_date = extract_date_v2(file_uri)
-    std_df['data_date'] = ingestion_date
+    
     formatted_date = ingestion_date.strftime('%Y-%m-%d')
-    parquet_unique_id = f'part-00000-{str(uuid.uuid4())}'
-    std_df.to_parquet(f"gs://{destination_bucket}/Repo/nationstar_monthly_remittance/ingestion_date={formatted_date}/{parquet_unique_id}.snappy.parquet", compression='snappy')
-    print('Successfully wrote the nationstar_monthly_remittance Parquet file!')
+    parent_folder = 'Repo'
+    sub_folder = 'nationstar_monthly_remittance'
+    write_parquet_file(std_df, sub_folder, parent_folder, formatted_date)
+    
+    print(f'Successfully wrote the {sub_folder} Parquet file!')

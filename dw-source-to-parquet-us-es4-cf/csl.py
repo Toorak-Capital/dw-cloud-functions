@@ -46,8 +46,5 @@ def trigger_on_csl_upload(file_path, file_uri):
         print('File is empty. No further action taken.')
     else:
         ingestion_date = extract_date(file_path)
-        date_object = datetime.strptime(ingestion_date, "%Y-%m-%d").date().strftime("%m/%d/%Y")
-        df['data_date'] = date_object
-        print(date_object)
-        write_parquet_file(df, 'CSL_Running_Balances','csl' ,ingestion_date)
+        write_parquet_file(df, 'CSL_Running_Balances','csl', ingestion_date)
         print('Successfully wrote the CSL_Running_Balances Parquet file!')

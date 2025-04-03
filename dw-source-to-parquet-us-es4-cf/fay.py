@@ -59,10 +59,10 @@ def trigger_on_fay_report(file_path, file_uri):
     df = df.astype(str)
 
     # Determine the correct subfolder dynamically
-    main_folder = 'Fay'
+    parent_folder = 'Fay'
     sub_folder = '_'.join(file_path.split('/')[-1].split('_')[:-1])
-    logging.info('main_folder:%s; sub_folder:%s; formatted_date:%s', main_folder, sub_folder, formatted_date)
+    logging.info('main_folder:%s; sub_folder:%s; formatted_date:%s', parent_folder, sub_folder, formatted_date)
     
     # Write the DataFrame to Parquet
-    write_parquet_by_date(df, main_folder, sub_folder, formatted_date)
+    write_parquet_file(df, sub_folder, parent_folder, formatted_date)
     logging.info(f"Successfully wrote the Fay {sub_folder} Parquet file!")
